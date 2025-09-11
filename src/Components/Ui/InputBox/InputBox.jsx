@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import MobileInputBox from "./MobileInputBox";
 import { LuCheck, LuCheckCheck } from "react-icons/lu";
+import { useSelector } from "react-redux";
 
 const InputBox = ({
   error,
@@ -18,11 +19,20 @@ const InputBox = ({
   placeholder,
   options = [],
 }) => {
+  const authData = useSelector((state) => state.auth);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownLabel, setDropdownLabel] = useState("");
   const [dropdownValue, setDropdownValue] = useState("");
   const [checked, setChecked] = useState(false);
   const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    if (authData.theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [authData]);
   const handleDropDown = () => {
     setDropdownOpen(!dropdownOpen);
   };
@@ -63,15 +73,17 @@ const InputBox = ({
   if (type === "text" || type === "password") {
     return (
       <div className="h-28 w-full px-2 flex flex-col gap-2">
-        <label className="text-sm text-left font-poppins block mb-1 text-white">
+        <label className="text-sm text-left font-poppins block mb-1 text-[#1976d2] font-bold dark:font-light dark:text-white">
           {label} {required && "*"}
         </label>
         <input
           type={type}
           placeholder={placeholder}
-          className={`w-full font-poppins px-4 py-3  border text-white ${
-            error?.length ? "border-red-400" : "border-white/20"
-          } rounded-md text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#6a5af9] ${
+          className={`w-full font-poppins px-4 py-3 border-2 dark:border text-black dark:text-white ${
+            error?.length
+              ? "border-red-400"
+              : "border-[#1976d2] dark:border-white/20"
+          } rounded-md text-sm placeholder-gray-500 focus:outline-none dark:focus:ring-2 dark:focus:ring-[#6a5af9] ${
             disabled ? "bg-gray-900 " : "bg-transparent"
           }`}
           autoFocus={autoFocus}
@@ -96,15 +108,17 @@ const InputBox = ({
     };
     return (
       <div className="h-28 w-full px-2 flex flex-col gap-2">
-        <label className="text-sm text-left font-poppins block mb-1 text-white">
+        <label className="text-sm text-left font-poppins block mb-1 text-[#1976d2] font-bold dark:font-light dark:text-white">
           {label} {required && "*"}
         </label>
         <input
           type="text"
           placeholder={placeholder}
-          className={`w-full font-poppins px-4 py-3  border text-white ${
-            error?.length ? "border-red-400" : "border-white/20"
-          } rounded-md text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#6a5af9] ${
+          className={`w-full font-poppins px-4 py-3 border-2 dark:border text-black dark:text-white ${
+            error?.length
+              ? "border-red-400"
+              : "border-[#1976d2] dark:border-white/20"
+          } rounded-md text-sm placeholder-gray-500 focus:outline-none dark:focus:ring-2 dark:focus:ring-[#6a5af9] ${
             disabled ? "bg-gray-900 " : "bg-transparent"
           }`}
           autoFocus={autoFocus}
