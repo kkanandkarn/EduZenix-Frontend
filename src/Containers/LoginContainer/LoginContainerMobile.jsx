@@ -9,34 +9,17 @@ import Button from "../../Components/Ui/Button/Button";
 import Logo from "../../assets/images/logo.png";
 import { LuMoon, LuSun } from "react-icons/lu";
 
-const LoginContainerMobile = () => {
-  const authData = useSelector((state) => state.auth);
+const LoginContainerMobile = ({
+  authData,
+  formData,
+  setFormData,
+  errors,
+  setErrors,
+  handleChange,
+  handleSubmit,
+}) => {
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({
-    email: "",
-    otp: "",
-    password: "",
-    authType: "",
-  });
-  const [errors, setErrors] = useState({
-    email: "",
-    otp: "",
-    password: "",
-    authType: "",
-  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: "",
-    }));
-  };
   const handleAuthType = (authType) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -56,6 +39,7 @@ const LoginContainerMobile = () => {
   const handleThemeChange = () => {
     const newTheme = authData.theme === "dark" ? "light" : "dark";
     dispatch(login({ theme: newTheme }));
+    localStorage.setItem("theme", newTheme);
   };
 
   return (
@@ -143,7 +127,11 @@ const LoginContainerMobile = () => {
 
         {(formData.authType === "otp" || formData.authType === "password") && (
           <div className="w-full flex items-center justify-center">
-            <Button label={"Login"} additionalClass={"w-1/2"} />
+            <Button
+              label={"Login"}
+              additionalClass={"w-1/2"}
+              onClick={handleSubmit}
+            />
           </div>
         )}
 

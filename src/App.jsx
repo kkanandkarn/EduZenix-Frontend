@@ -4,9 +4,13 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import LoginPage from "./Pages/LoginPage";
 import { Route, Routes } from "react-router-dom";
+import SuperAdminDashboard from "./Pages/SuperAdmin/SuperAdminDashboard";
 
 function App() {
-  const openRoutes = [{ path: "/", element: <LoginPage /> }];
+  const openRoutes = [
+    { path: "/", element: <LoginPage /> },
+    { path: "/dashboard", element: <SuperAdminDashboard /> },
+  ];
   return (
     <>
       {" "}
