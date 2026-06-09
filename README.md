@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
@@ -73,3 +74,7 @@ export default defineConfig([
   },
 ])
 ```
+=======
+# EduZenix-Frontend
+A comprehensive SaaS ERP platform tailored for universities, colleges, and educational institutions to streamline operations and enhance efficiency.
+>>>>>>> cad5f9c3b3e363b8ae7229ff3026f9428bc5ad95
