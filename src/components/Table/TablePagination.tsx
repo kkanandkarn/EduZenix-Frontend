@@ -7,7 +7,7 @@ import {
   gridPaginationModelSelector,
   gridRowCountSelector,
 } from "@mui/x-data-grid";
-import type { TableState } from "../../types/Table";
+import type { TableState } from "../../types";
 declare module "@mui/x-data-grid" {
   interface PaginationPropsOverrides {
     handleChange: (name: keyof TableState, value: string | number) => void;

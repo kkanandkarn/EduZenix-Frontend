@@ -7,6 +7,7 @@ import {
   Avatar,
   Chip,
   Divider,
+  Paper,
 } from "@mui/material";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
@@ -34,7 +35,7 @@ const getStatusStyle = (status: Status) => {
   switch (normalized) {
     case "active":
       return {
-        bgcolor: "success.light",
+        bgcolor: "var(--green-200)",
         color: "success.main",
       };
 
@@ -42,13 +43,13 @@ const getStatusStyle = (status: Status) => {
     case "hold":
     case "suspended":
       return {
-        bgcolor: "error.light",
+        bgcolor: "var(--red-200)",
         color: "error.main",
       };
 
     case "under negotiation":
       return {
-        bgcolor: "warning.light",
+        bgcolor: "var(--yellow-200)",
         color: "warning.main",
       };
 
@@ -101,9 +102,9 @@ const recentOnboardingData: Onboarding[] = [
 
 const RecentOnboardings: React.FC = () => {
   return (
-    <Box sx={{ width: "100%", pt: 3, px: 2, minHeight: 380 }}>
+    <Paper elevation={0} sx={{ width: "30%", pt: 3, px: 2, minHeight: 380 }}>
       {/* Header */}
-      <Stack
+      <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
@@ -126,20 +127,19 @@ const RecentOnboardings: React.FC = () => {
         >
           View All
         </Button>
-      </Stack>
+      </Box>
 
       {/* List */}
       {recentOnboardingData.length > 0 ? (
         recentOnboardingData.map((data, index) => (
           <Box key={data.id}>
-            <Stack
-              spacing={2}
+            <Box
               sx={{
                 mt: 2,
                 py: 2,
                 display: "flex",
                 justifyContent: "space-between",
-                alignItems: "center",
+                alignItems: "flex-start",
               }}
             >
               {/* Left */}
@@ -160,7 +160,14 @@ const RecentOnboardings: React.FC = () => {
                     {data.name}
                   </Typography>
 
-                  <Stack direction="row" spacing={1} sx={{ py: 0.5 }}>
+                  <Box
+                    sx={{
+                      py: 0.5,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                    }}
+                  >
                     <Chip
                       label={data.type}
                       size="small"
@@ -170,14 +177,14 @@ const RecentOnboardings: React.FC = () => {
                     <Typography sx={{ fontSize: 12, color: "text.secondary" }}>
                       {data.package}
                     </Typography>
-                  </Stack>
+                  </Box>
 
-                  <Stack
+                  <Box
                     sx={{
                       display: "flex",
                       alignItems: "center",
+                      gap: 1,
                     }}
-                    spacing={1}
                   >
                     <ScheduleIcon
                       sx={{ fontSize: 16, color: "text.secondary" }}
@@ -185,7 +192,7 @@ const RecentOnboardings: React.FC = () => {
                     <Typography sx={{ fontSize: 12, color: "text.secondary" }}>
                       {data.onboarded}
                     </Typography>
-                  </Stack>
+                  </Box>
                 </Box>
               </Stack>
 
@@ -199,7 +206,7 @@ const RecentOnboardings: React.FC = () => {
                   ...getStatusStyle(data.status),
                 }}
               />
-            </Stack>
+            </Box>
 
             {index !== recentOnboardingData.length - 1 && <Divider />}
           </Box>
@@ -219,7 +226,7 @@ const RecentOnboardings: React.FC = () => {
           </Typography>
         </Stack>
       )}
-    </Box>
+    </Paper>
   );
 };
 

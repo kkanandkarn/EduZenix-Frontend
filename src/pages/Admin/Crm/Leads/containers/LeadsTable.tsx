@@ -13,14 +13,14 @@ interface Props {
 const LeadsTable = ({ tableState, handleChange }: Props) => {
   const navigate = useNavigate();
   const getBgColor = (percentage: number) => {
-    if (percentage <= 25) return "var(--color-red-500)";
-    if (percentage <= 50) return "var(--color-yellow-400)";
-    return "var(--color-green-500)";
+    if (percentage <= 25) return "var(--red-500)";
+    if (percentage <= 50) return "var(--yellow-400)";
+    return "var(--green-500)";
   };
   const getPendingTextColor = (pendingPercentage: number) => {
-    if (pendingPercentage <= 25) return "var(--color-green-500)"; // low pending → good
-    if (pendingPercentage <= 50) return "var(--color-yellow-500)"; // moderate
-    return "var(--color-red-500)"; // high pending → bad
+    if (pendingPercentage <= 25) return "var(--green-500)"; // low pending → good
+    if (pendingPercentage <= 50) return "var(--yellow-500)"; // moderate
+    return "var(--red-500)"; // high pending → bad
   };
   const columnAlign = {
     headerAlign: "left" as const,

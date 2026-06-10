@@ -100,11 +100,11 @@ const DashboardMetricsCard = () => {
                   fontSize: 12,
                   ...(data.status === "growth" && {
                     color: "success.main",
-                    bgcolor: "success.light",
+                    bgcolor: "var(--green-200)",
                   }),
                   ...(data.status === "steady" && {
                     color: "warning.main",
-                    bgcolor: "warning.light",
+                    bgcolor: "var(--yellow-200)",
                   }),
                   ...(data.status === "decline" && {
                     color: "error.main",

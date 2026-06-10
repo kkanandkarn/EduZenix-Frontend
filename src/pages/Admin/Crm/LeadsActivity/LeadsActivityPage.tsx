@@ -104,7 +104,7 @@ const LeadsActvityPage = () => {
   ];
 
   const handleChange = (name: keyof TableState, value: string | number) => {
-    setState((p) => ({ ...p, [name]: value }));
+    setState((p: TableState) => ({ ...p, [name]: value }));
   };
 
   const handleApplyFilter = () => {

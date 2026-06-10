@@ -7,7 +7,7 @@ import type {
   GridValidRowModel,
 } from "@mui/x-data-grid";
 import TablePagination from "./TablePagination";
-import type { TableState } from "../../types/Table";
+import type { TableState } from "../../types";
 
 // Generic component banao
 type AppTableProps<T extends GridValidRowModel> = {
