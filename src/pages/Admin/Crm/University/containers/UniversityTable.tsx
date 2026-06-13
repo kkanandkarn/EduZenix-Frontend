@@ -4,12 +4,16 @@ import { Box, Typography } from "@mui/material";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import EmailIcon from "@mui/icons-material/Email";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { AppTable, AppMenu } from "../../../../../components";
+import { AppTable, AppMenu, SerialNumberCell } from "../../../../../components";
 import type { ModalTypes, TableState } from "../types";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
 import { IconButton } from "@mui/material";
-import UniversityDetailsDialog from "./UniversityDetailsDialog";
+import {
+  OnboardingEmailDialog,
+  OnboardingLinkDialog,
+  UniversityDetailsDialog,
+} from "../Dialogs";
 
 interface Props {
   tableState: TableState;
@@ -134,19 +138,11 @@ const UniversityTable = ({ tableState, handleChange }: Props) => {
       sortable: false,
       width: 60,
       renderCell: (params: GridRenderCellParams) => (
-        <Box
-          sx={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Typography sx={{ fontWeight: 500, color: "var(--slate-600)" }}>
-            {params.id}
-          </Typography>
-        </Box>
+        <SerialNumberCell
+          rowIndex={rows.findIndex((row) => row.id === params.id)}
+          pageNo={tableState.pageNo}
+          pageSize={tableState.pageSize}
+        />
       ),
     },
     {
@@ -278,6 +274,16 @@ const UniversityTable = ({ tableState, handleChange }: Props) => {
 
       <UniversityDetailsDialog
         open={modal === "VIEW"}
+        handleClose={handleCloseModal}
+        id={rowId}
+      />
+      <OnboardingLinkDialog
+        open={modal === "ONBOARDING_LINK"}
+        handleClose={handleCloseModal}
+        id={rowId}
+      />
+      <OnboardingEmailDialog
+        open={modal === "ONBOARDING_EMAIL"}
         handleClose={handleCloseModal}
         id={rowId}
       />

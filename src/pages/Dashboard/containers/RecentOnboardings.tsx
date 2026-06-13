@@ -102,7 +102,10 @@ const recentOnboardingData: Onboarding[] = [
 
 const RecentOnboardings: React.FC = () => {
   return (
-    <Paper elevation={0} sx={{ width: "30%", pt: 3, px: 2, minHeight: 380 }}>
+    <Paper
+      elevation={0}
+      sx={{ width: "30%", pt: 3, px: 2, minHeight: 380, borderRadius: "16px" }}
+    >
       {/* Header */}
       <Box
         sx={{

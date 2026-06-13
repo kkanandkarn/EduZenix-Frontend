@@ -1,6 +1,6 @@
 export interface TableState {
   search: string;
-  searchColumn: string;
+  searchColumn?: string;
   sortColumn: string;
   sortOrder: "asc" | "desc";
   pageNo: number;

@@ -28,5 +28,12 @@ export interface UniversityDetails {
   email: string | null;
   contact: string | null;
   status: UniversityStatus;
+  address: string;
+  author?: UniversityAuthorDetails;
+}
+export interface UniversityAuthorDetails {
+  createdBy: string;
+  updatedAt: string;
+  remarks: string;
 }
 export type ModalTypes = "VIEW" | "ONBOARDING_LINK" | "ONBOARDING_EMAIL";

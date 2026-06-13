@@ -3,7 +3,11 @@ import type { TableState } from "../types";
 import { useNavigate } from "react-router-dom";
 import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Box, Chip, Typography } from "@mui/material";
-import { AppTable, RatingStars } from "../../../../../components";
+import {
+  AppTable,
+  RatingStars,
+  SerialNumberCell,
+} from "../../../../../components";
 import { formatDate, formatTime } from "../../../../../utils/helper";
 
 interface Props {
@@ -133,19 +137,11 @@ const LeadsActivityTable = ({ tableState, handleChange }: Props) => {
       sortable: false,
       width: 60,
       renderCell: (params: GridRenderCellParams) => (
-        <Box
-          sx={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Typography sx={{ fontWeight: 500, color: "var(--slate-600)" }}>
-            {params.id}
-          </Typography>
-        </Box>
+        <SerialNumberCell
+          rowIndex={rows.findIndex((row) => row.id === params.id)}
+          pageNo={tableState.pageNo}
+          pageSize={tableState.pageSize}
+        />
       ),
     },
     {

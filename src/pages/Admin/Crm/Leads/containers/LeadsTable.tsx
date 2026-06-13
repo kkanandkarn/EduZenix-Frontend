@@ -1,7 +1,11 @@
 import React from "react";
 import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Box, LinearProgress, Typography } from "@mui/material";
-import { AppTable, AppButton } from "../../../../../components";
+import {
+  AppTable,
+  AppButton,
+  SerialNumberCell,
+} from "../../../../../components";
 import { useNavigate } from "react-router-dom";
 import type { TableState } from "../types";
 
@@ -91,19 +95,11 @@ const LeadsTable = ({ tableState, handleChange }: Props) => {
       sortable: false,
       width: 60,
       renderCell: (params: GridRenderCellParams) => (
-        <Box
-          sx={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Typography sx={{ fontWeight: 500, color: "var(--color-slate-600)" }}>
-            {params.id}
-          </Typography>
-        </Box>
+        <SerialNumberCell
+          rowIndex={rows.findIndex((row) => row.id === params.id)}
+          pageNo={tableState.pageNo}
+          pageSize={tableState.pageSize}
+        />
       ),
     },
     {

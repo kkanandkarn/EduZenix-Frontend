@@ -1,3 +1,5 @@
+import type { SvgIconComponent } from "@mui/icons-material";
+
 export interface TextInputProps {
   type: InputType;
   label: string;
@@ -16,6 +18,9 @@ export interface TextInputProps {
   searchColumns?: SearchColumn[];
   searchColumn?: string;
   onColumnChange?: (key: string) => void;
+  StartIcon?: SvgIconComponent;
+  EndIcon?: SvgIconComponent;
+  bgColor?: string;
 }
 export type SearchColumn = {
   key: string;
@@ -36,7 +41,8 @@ export type InputType =
   | "otp"
   | "search"
   | "SingleSelect"
-  | "MultiSelect";
+  | "MultiSelect"
+  | "outline";
 export interface SingleSelectOptions {
   value: number;
   label: string;

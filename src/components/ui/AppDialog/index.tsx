@@ -35,6 +35,9 @@ interface AppDialogProps {
   content?: React.ReactNode;
   actions?: React.ReactNode;
   sx?: SxProps<Theme>;
+  titleBgColor?: string;
+  contentBgColor?: string;
+  actionsBgColor?: string;
 }
 
 export default function AppDialog({
@@ -44,6 +47,9 @@ export default function AppDialog({
   content,
   actions,
   sx,
+  titleBgColor,
+  contentBgColor,
+  actionsBgColor,
 }: Readonly<AppDialogProps>) {
   return (
     <BootstrapDialog
@@ -55,7 +61,7 @@ export default function AppDialog({
       slots={{ transition: Transition }}
     >
       {title ? (
-        <>
+        <Box sx={{ bgcolor: titleBgColor ?? "inherit" }}>
           <Box sx={{ px: 3 }}>
             <DialogTitle
               sx={{ m: 0, px: 2, py: 3 }}
@@ -78,19 +84,20 @@ export default function AppDialog({
           >
             <CloseIcon />
           </IconButton>
-
-          <Divider />
-        </>
+        </Box>
       ) : null}
 
       {/* ✅ Removed `dividers` — manual Dividers above/below already handle separation */}
-      {content && <DialogContent>{content}</DialogContent>}
+      {content && (
+        <DialogContent sx={{ bgcolor: contentBgColor ?? "inherit" }}>
+          {content}
+        </DialogContent>
+      )}
 
       {actions && (
-        <>
-          <Divider />
+        <Box sx={{ bgcolor: actionsBgColor ?? "", py: 1 }}>
           <DialogActions>{actions}</DialogActions>
-        </>
+        </Box>
       )}
     </BootstrapDialog>
   );

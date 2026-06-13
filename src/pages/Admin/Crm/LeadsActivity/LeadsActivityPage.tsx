@@ -4,6 +4,7 @@ import {
   BreadCrumbs,
   TableTopBar,
   FilterRenderer,
+  AppButton,
 } from "../../../../components";
 import {
   LeadsProfile,
@@ -12,6 +13,8 @@ import {
 } from "./containers";
 
 import type { LeadActivityFilters, TableFilters, TableState } from "./types";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { Link, useNavigate } from "react-router-dom";
 
 const LeadsActvityPage = () => {
   const initialFilters: LeadActivityFilters = {
@@ -30,6 +33,10 @@ const LeadsActvityPage = () => {
     pageSize: 10,
   });
   const [filters, setFilters] = useState<LeadActivityFilters>(initialFilters);
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate("/leads");
+  };
   const columnFilters: TableFilters[] = [
     {
       key: "tenantType",
@@ -119,12 +126,17 @@ const LeadsActvityPage = () => {
       {" "}
       <BreadCrumbs />
       <Box sx={{ marginY: 2 }}>
-        <Typography
-          variant="h6"
-          sx={{ fontWeight: "semibold", color: "var(--slate-800)" }}
-        >
-          Lead Activity
-        </Typography>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Link to="/leads">
+            <ArrowBackIosIcon sx={{ fontSize: "16px" }} />
+          </Link>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: "semibold", color: "var(--slate-800)" }}
+          >
+            Lead Activity
+          </Typography>
+        </Box>
         <Typography className="text-slate-600">
           Track and analyze Consultant performance, follow-ups, and conversion
           behavior.

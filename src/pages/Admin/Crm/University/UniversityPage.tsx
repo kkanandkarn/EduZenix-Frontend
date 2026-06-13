@@ -175,14 +175,6 @@ const CrmUniversityPage = () => {
               Manage and track university accreditation status
             </Typography>
           </Box>
-          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-            <AppButton
-              variant="outlined"
-              label="Bulk Upload"
-              startIcon={<UploadFileIcon />}
-            />
-            <AppButton variant="contained" label="+ Add New University" />
-          </Box>
         </Box>
       </Box>
       <UniversityStats />
