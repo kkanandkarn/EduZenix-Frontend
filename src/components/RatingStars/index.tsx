@@ -32,18 +32,16 @@ const RatingStars = ({
         {Array.from({ length: fullStars }).map((_, i) => (
           <StarIcon
             key={`full-${i}`}
-            sx={{ fontSize: 18, color: "var(--color-yellow-400)" }}
+            sx={{ fontSize: 18, color: "var(--yellow-400)" }}
           />
         ))}
         {hasHalf && (
-          <StarHalfIcon
-            sx={{ fontSize: 18, color: "var(--color-yellow-400)" }}
-          />
+          <StarHalfIcon sx={{ fontSize: 18, color: "var(--yellow-400)" }} />
         )}
         {Array.from({ length: emptyStars }).map((_, i) => (
           <StarBorderIcon
             key={`empty-${i}`}
-            sx={{ fontSize: 18, color: "var(--color-yellow-400)" }}
+            sx={{ fontSize: 18, color: "var(--yellow-400)" }}
           />
         ))}
       </Box>

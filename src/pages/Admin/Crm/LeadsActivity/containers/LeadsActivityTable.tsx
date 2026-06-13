@@ -1,9 +1,13 @@
 import React from "react";
-import type { TableState } from "../../../../../types/Table";
+import type { TableState } from "../types";
 import { useNavigate } from "react-router-dom";
 import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Box, Chip, Typography } from "@mui/material";
-import { AppTable, RatingStars } from "../../../../../components";
+import {
+  AppTable,
+  RatingStars,
+  SerialNumberCell,
+} from "../../../../../components";
 import { formatDate, formatTime } from "../../../../../utils/helper";
 
 interface Props {
@@ -16,18 +20,18 @@ const statusConfig: Record<
 > = {
   Converted: {
     label: "Converted",
-    bgColor: "var(--color-green-100)",
-    textColor: "var(--color-green-700)",
+    bgColor: "var(--green-100)",
+    textColor: "var(--green-700)",
   },
   "Under Negotiation": {
     label: "Under Negotiation",
-    bgColor: "var(--color-yellow-100)",
-    textColor: "var(--color-yellow-700)",
+    bgColor: "var(--yellow-100)",
+    textColor: "var(--yellow-700)",
   },
   Revisit: {
     label: "Revisit",
-    bgColor: "var(--color-blue-100)",
-    textColor: "var(--color-blue-700)",
+    bgColor: "var(--blue-100)",
+    textColor: "var(--blue-700)",
   },
 };
 const LeadsActivityTable = ({ tableState, handleChange }: Props) => {
@@ -133,19 +137,11 @@ const LeadsActivityTable = ({ tableState, handleChange }: Props) => {
       sortable: false,
       width: 60,
       renderCell: (params: GridRenderCellParams) => (
-        <Box
-          sx={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Typography sx={{ fontWeight: 500, color: "var(--color-slate-600)" }}>
-            {params.id}
-          </Typography>
-        </Box>
+        <SerialNumberCell
+          rowIndex={rows.findIndex((row) => row.id === params.id)}
+          pageNo={tableState.pageNo}
+          pageSize={tableState.pageSize}
+        />
       ),
     },
     {
@@ -251,12 +247,12 @@ const LeadsActivityTable = ({ tableState, handleChange }: Props) => {
             sx={{
               fontSize: 13,
               fontWeight: 500,
-              color: "var(--color-slate-700)",
+              color: "var(--slate-700)",
             }}
           >
             {formatDate(params.value as string)}
           </Typography>
-          <Typography sx={{ fontSize: 11, color: "var(--color-slate-400)" }}>
+          <Typography sx={{ fontSize: 11, color: "var(--slate-400)" }}>
             {formatTime(params.value as string)}
           </Typography>
         </Box>

@@ -131,9 +131,9 @@ const LoginRightContainer = () => {
           Access your management dashboard
         </Typography>
 
-        <div className="pb-4 pt-6 w-full">
+        <Box sx={{ mt: 2 }}>
           <LoginTypeButtons loginType={loginType} setLoginType={setLoginType} />
-        </div>
+        </Box>
 
         <Stack spacing={1} sx={{ mt: 4 }}>
           <Input

@@ -1,4 +1,4 @@
-export type { TableFilters, TableState } from "../../../../../types/Table";
+export type { TableFilters, TableState } from "../../../../../types";
 export interface LeadsState {
   search: string;
   sortBy: string;

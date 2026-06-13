@@ -33,7 +33,7 @@ const CustomTooltip = ({
   payload,
   label,
 }: TooltipProps<number, string>) => {
-  if (active && payload && payload.length) {
+  if (active && payload?.length) {
     return (
       <Paper
         elevation={6}
@@ -74,12 +74,12 @@ const CustomTooltip = ({
 const RevenueEnrollmentChart: React.FC = () => {
   return (
     <Paper
-      elevation={3}
+      elevation={0}
       sx={{
         p: 4,
         borderRadius: 4,
-        width: "100%",
-        maxWidth: 600,
+        width: "70%",
+        maxHeight: 600,
       }}
     >
       {/* Header */}
@@ -105,48 +105,47 @@ const RevenueEnrollmentChart: React.FC = () => {
         </Box>
 
         {/* Legend */}
-        <Stack sx={{ display: "flex", pt: 0.5 }} spacing={3}>
-          <Stack
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              mb: 3,
-            }}
-            spacing={1}
-          >
+        <Stack
+          sx={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 2,
+            width: "50%",
+          }}
+        >
+          <Box sx={{ flexDirection: "row", alignItems: "center" }}>
             <Box
               sx={{
                 width: 10,
                 height: 10,
                 borderRadius: "50%",
                 bgcolor: "#1d4ed8",
+                display: "inline-flex",
+                alignSelf: "center", // ← this centers it against the text
+                flexShrink: 0,
               }}
             />
-            <Typography variant="caption" color="text.secondary">
+            <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>
               Revenue
             </Typography>
-          </Stack>
-
-          <Stack
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              mb: 3,
-            }}
-            spacing={1}
-          >
+          </Box>
+          <Box sx={{ flexDirection: "row", alignItems: "center" }}>
             <Box
               sx={{
+                mt: 0,
                 width: 10,
                 height: 10,
                 borderRadius: "50%",
                 bgcolor: "#bfdbfe",
+                display: "inline-flex",
+                alignSelf: "center",
+                flexShrink: 0,
               }}
             />
-            <Typography variant="caption" color="text.secondary">
+            <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>
               Enrollments
             </Typography>
-          </Stack>
+          </Box>
         </Stack>
       </Stack>
 

@@ -71,7 +71,7 @@ const CrmUniversityPage = () => {
     {
       key: "district",
       dataType: "MultiSelect",
-      label: "District",
+      label: "City",
       options: [
         {
           value: 1,
@@ -144,7 +144,7 @@ const CrmUniversityPage = () => {
   };
 
   const handleChange = (name: keyof TableState, value: string | number) => {
-    setState((p) => ({ ...p, [name]: value }));
+    setState((p: TableState) => ({ ...p, [name]: value }));
   };
   const handleApplyFilter = () => {
     console.log("APPLIED FILTERS: ", filters);
@@ -174,14 +174,6 @@ const CrmUniversityPage = () => {
             <Typography className="text-slate-600">
               Manage and track university accreditation status
             </Typography>
-          </Box>
-          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-            <AppButton
-              variant="outlined"
-              label="Bulk Upload"
-              startIcon={<UploadFileIcon />}
-            />
-            <AppButton variant="contained" label="+ Add New University" />
           </Box>
         </Box>
       </Box>
