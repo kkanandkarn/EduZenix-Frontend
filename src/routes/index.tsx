@@ -1,7 +1,6 @@
 import { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import DashboardLayoutWrapper from "../Layout/DashboardLayoutWrapper";
-// import Layout from "../Layout/Layout";
 const DashboardPage = lazy(() => import("../pages/Dashboard/DashboardPage"));
 const LoginPage = lazy(() => import("../pages/Auth/Login/LoginPage"));
 const LeadsPage = lazy(() => import("../pages/Admin/Crm/Leads/LeadsPage"));

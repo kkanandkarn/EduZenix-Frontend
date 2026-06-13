@@ -10,8 +10,6 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import HelpIcon from "@mui/icons-material/Help";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Account } from "@toolpad/core/Account";
-import Input from "../components/ui/Input";
-import { useState } from "react";
 import ModuleFinder from "./ModuleFinder";
 
 const ToolbarActions = () => {

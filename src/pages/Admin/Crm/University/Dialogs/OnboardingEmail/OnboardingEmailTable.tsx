@@ -1,13 +1,12 @@
-import { Box, Typography } from "@mui/material";
-import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import React, { useState } from "react";
+import { Box } from "@mui/material";
+import type { GridColDef } from "@mui/x-data-grid";
+import { useState } from "react";
 import {
   AppButton,
   AppTable,
   SerialNumberCell,
 } from "../../../../../../components";
 import type { TableState } from "../../types";
-import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import SendIcon from "@mui/icons-material/Send";
 
 const OnboardingEmailTable = () => {

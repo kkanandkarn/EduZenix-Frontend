@@ -1,5 +1,4 @@
 import { MenuItem, Select, type SelectChangeEvent } from "@mui/material";
-import React from "react";
 import type { SearchColumn } from "../../type";
 
 interface Props {

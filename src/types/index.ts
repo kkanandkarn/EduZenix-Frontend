@@ -20,3 +20,11 @@ export type TableFilters = {
   label: string;
   options?: FilterOption[];
 };
+export interface FilterRange {
+  gte?: string;
+  lte?: string;
+}
+export interface TableFilterOptions {
+  value: string | number;
+  label: string;
+}

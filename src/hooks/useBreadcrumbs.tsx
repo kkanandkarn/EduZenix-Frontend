@@ -1,6 +1,9 @@
 import { Link, Typography } from "@mui/material";
 import { Link as RouterLink, useLocation } from "react-router-dom";
-import type { BreadcrumbConfig, BreadcrumbItem } from "./type";
+import type {
+  BreadcrumbConfig,
+  BreadcrumbItem,
+} from "../features/Breadcrumbs/type";
 
 export const BREADCRUMB_MAP: Record<string, BreadcrumbConfig> = {
   "/dashboard": [{ label: "Dashboard" }],
@@ -15,16 +18,14 @@ export const BREADCRUMB_MAP: Record<string, BreadcrumbConfig> = {
   "/institution/otherInstitutions": [{ label: "Other Institutions" }],
 };
 
-// Converts route patterns like "/leads/:id" into a regex
 const matchRoute = (pattern: string, pathname: string): boolean => {
   const regex = new RegExp("^" + pattern.replace(/:[^/]+/g, "[^/]+") + "$");
   return regex.test(pathname);
 };
 
-export const generateBreadcrumbs = () => {
+export const useBreadcrumbs = () => {
   const location = useLocation();
 
-  // Find the first pattern that matches the current pathname
   const matchedKey = Object.keys(BREADCRUMB_MAP).find((pattern) =>
     matchRoute(pattern, location.pathname),
   );
@@ -32,6 +33,7 @@ export const generateBreadcrumbs = () => {
   if (!matchedKey) return [];
 
   const config = BREADCRUMB_MAP[matchedKey];
+
   const items: BreadcrumbItem[] = [
     { label: "Home" },
     ...(typeof config === "function" ? config({}) : config),

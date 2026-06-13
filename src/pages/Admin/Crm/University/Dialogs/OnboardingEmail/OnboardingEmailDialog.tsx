@@ -1,4 +1,3 @@
-import React from "react";
 import { AppDialog } from "../../../../../../components";
 import OnboardingEmailDialogTitle from "./OnboardingEmailDialogTitle";
 import OnboardingEmailContent from "./OnboardingEmailContent";
@@ -8,7 +7,7 @@ interface Props {
   open: boolean;
   handleClose: () => void;
 }
-const OnboardingEmailDialog = ({ id, open, handleClose }: Props) => {
+const OnboardingEmailDialog = ({ open, handleClose }: Props) => {
   return (
     <AppDialog
       open={open}

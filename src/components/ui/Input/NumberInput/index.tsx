@@ -22,7 +22,7 @@ const NumberInput = (props: TextInputProps) => {
         value={props.value}
         onChange={handleChange}
         required={props.required ?? false}
-        inputRef={props.ref}
+        inputRef={props.inputRef}
         disabled={props.disabled ?? false}
         error={!!props.error}
         helperText={props.error}

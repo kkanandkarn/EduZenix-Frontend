@@ -1,5 +1,4 @@
 import { InputAdornment, OutlinedInput } from "@mui/material";
-import React from "react";
 import type { TextInputProps } from "../../type";
 
 const OutlineInput = (props: TextInputProps) => {
@@ -14,7 +13,7 @@ const OutlineInput = (props: TextInputProps) => {
       required={props.required}
       disabled={props.disabled}
       autoFocus={props.autoFocus}
-      inputRef={props.ref}
+      inputRef={props.inputRef}
       size="small"
       fullWidth={props.fullWidth}
       startAdornment={

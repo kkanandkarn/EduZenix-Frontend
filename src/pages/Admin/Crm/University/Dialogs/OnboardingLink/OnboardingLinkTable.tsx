@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
-import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import React, { useState } from "react";
+import type { GridColDef } from "@mui/x-data-grid";
+import { useState } from "react";
 import {
   AppButton,
   AppTable,

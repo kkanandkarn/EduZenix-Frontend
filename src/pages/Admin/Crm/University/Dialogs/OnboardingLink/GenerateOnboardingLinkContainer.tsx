@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
 import { AppButton } from "../../../../../../components";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";

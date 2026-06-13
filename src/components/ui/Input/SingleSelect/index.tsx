@@ -1,9 +1,7 @@
-import React from "react";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import type { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import type { OutlineSelectProps } from "../../type";
 import { InputLabel } from "@mui/material";
 
@@ -12,7 +10,6 @@ const ITEM_PADDING_TOP = 8;
 const SingleSelect = ({
   value,
   onChange,
-  placeholder,
   options,
   label,
 }: OutlineSelectProps) => {

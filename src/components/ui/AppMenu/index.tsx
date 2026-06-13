@@ -1,11 +1,5 @@
 import { useState } from "react";
-import {
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-} from "@mui/material";
+import { Menu, MenuItem, Typography } from "@mui/material";
 
 export interface AppMenuItem {
   label: string;

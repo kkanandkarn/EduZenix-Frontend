@@ -2,12 +2,10 @@ import { Box, Paper, Typography } from "@mui/material";
 import React, { useState } from "react";
 import {
   BreadCrumbs,
-  AppButton,
   TableTopBar,
   FilterRenderer,
   TabButtons,
 } from "../../../../components";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
 import type {
   TableFilters,
   TableState,
@@ -139,7 +137,7 @@ const CrmUniversityPage = () => {
       count: 30,
     },
   ];
-  const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
+  const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
     setStatus(newValue);
   };
 

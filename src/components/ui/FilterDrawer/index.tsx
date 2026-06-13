@@ -5,7 +5,6 @@ import {
   Typography,
   IconButton,
   Divider,
-  Button,
   Stack,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";

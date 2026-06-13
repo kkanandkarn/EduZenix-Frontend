@@ -1,5 +1,4 @@
-import { Box, Paper, Stack, Typography } from "@mui/material";
-import React from "react";
+import { Box, Stack, Typography } from "@mui/material";
 import { BreadCrumbs } from "../../components";
 import {
   DashboardMetricsCard,

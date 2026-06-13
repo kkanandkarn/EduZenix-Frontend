@@ -1,5 +1,4 @@
 import { Box, Typography } from "@mui/material";
-import React from "react";
 import SendOnboardingEmailContainer from "./SendOnboardingEmailContainer";
 import OnboardingEmailTable from "./OnboardingEmailTable";
 

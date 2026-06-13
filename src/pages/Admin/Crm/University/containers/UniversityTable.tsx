@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, IconButton } from "@mui/material";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import EmailIcon from "@mui/icons-material/Email";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -8,7 +8,6 @@ import { AppTable, AppMenu, SerialNumberCell } from "../../../../../components";
 import type { ModalTypes, TableState } from "../types";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
-import { IconButton } from "@mui/material";
 import {
   OnboardingEmailDialog,
   OnboardingLinkDialog,

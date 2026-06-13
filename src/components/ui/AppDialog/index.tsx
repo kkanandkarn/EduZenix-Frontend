@@ -9,7 +9,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import type { DialogProps } from "@mui/material/Dialog";
 import Slide from "@mui/material/Slide";
 import type { TransitionProps } from "@mui/material/transitions";
-import { Box, Divider } from "@mui/material";
+import { Box } from "@mui/material";
 
 const BootstrapDialog = styled(Dialog)<DialogProps>(({ theme }) => ({
   "& .MuiDialogContent-root": {
