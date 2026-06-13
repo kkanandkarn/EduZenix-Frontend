@@ -1,11 +1,10 @@
-import React from "react";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import RemoveIcon from "@mui/icons-material/Remove";
 import HealthAndSafetyIcon from "@mui/icons-material/HealthAndSafety";
-import { Box, Card, Grid, Paper, Typography } from "@mui/material";
+import { Box, Card, Paper, Typography } from "@mui/material";
 
 const DashboardMetricsCard = () => {
   const metricsData = [

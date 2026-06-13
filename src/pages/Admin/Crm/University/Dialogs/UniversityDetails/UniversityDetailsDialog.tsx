@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import type { UniversityDetails } from "../../types";
 import { AppDialog } from "../../../../../../components";
 import UniversityDetailsDialogTitle from "./UniversityDetailsDialogTitle";
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const UniversityDetailsDialog = ({ id, open, handleClose }: Props) => {
-  const [state, setState] = useState<UniversityDetails>({
+  const [state] = useState<UniversityDetails>({
     id: id,
     aisheCode: "U-1041",
     name: "Sandip University",
@@ -31,6 +31,7 @@ const UniversityDetailsDialog = ({ id, open, handleClose }: Props) => {
       remarks: "Accreditation documents verified",
     },
   });
+
   return (
     <AppDialog
       open={open}

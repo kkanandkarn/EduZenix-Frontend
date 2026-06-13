@@ -1,10 +1,9 @@
 import { Box, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   BreadCrumbs,
   TableTopBar,
   FilterRenderer,
-  AppButton,
 } from "../../../../components";
 import {
   LeadsProfile,
@@ -14,7 +13,7 @@ import {
 
 import type { LeadActivityFilters, TableFilters, TableState } from "./types";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const LeadsActvityPage = () => {
   const initialFilters: LeadActivityFilters = {
@@ -33,10 +32,7 @@ const LeadsActvityPage = () => {
     pageSize: 10,
   });
   const [filters, setFilters] = useState<LeadActivityFilters>(initialFilters);
-  const navigate = useNavigate();
-  const handleBack = () => {
-    navigate("/leads");
-  };
+
   const columnFilters: TableFilters[] = [
     {
       key: "tenantType",

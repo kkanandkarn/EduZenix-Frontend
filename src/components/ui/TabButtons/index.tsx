@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Tab, Tabs } from "@mui/material";
 import type { TabsProps } from "../type";
 

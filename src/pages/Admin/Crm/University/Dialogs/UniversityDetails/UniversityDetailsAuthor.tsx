@@ -1,5 +1,4 @@
 import { Box, Typography } from "@mui/material";
-import React from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import type { UniversityAuthorDetails } from "../../types";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";

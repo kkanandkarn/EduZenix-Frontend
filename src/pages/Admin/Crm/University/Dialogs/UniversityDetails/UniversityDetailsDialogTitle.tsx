@@ -1,4 +1,3 @@
-import React from "react";
 import type { UniversityDetails, UniversityStatus } from "../../types";
 import { Box, Chip, Link, Typography } from "@mui/material";
 import LanguageIcon from "@mui/icons-material/Language";

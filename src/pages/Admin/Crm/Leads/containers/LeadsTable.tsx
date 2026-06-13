@@ -1,4 +1,3 @@
-import React from "react";
 import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Box, LinearProgress, Typography } from "@mui/material";
 import {

@@ -1,11 +1,10 @@
-import * as React from "react";
 import { type Theme, useTheme } from "@mui/material/styles";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { type SelectChangeEvent } from "@mui/material/Select";
-import type { TableFilterOptions, TableFilters } from "../../../../types/Table";
+import type { TableFilterOptions } from "../../../../types";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -30,7 +29,7 @@ export default function MultiSelect({
   values,
   label,
   onChange,
-}: Props) {
+}: Readonly<Props>) {
   const theme = useTheme();
 
   const handleChange = (event: SelectChangeEvent<number[]>) => {
@@ -62,7 +61,7 @@ export default function MultiSelect({
           <MenuItem
             key={option.value}
             value={option.value}
-            style={getStyles(option.value, values, theme)}
+            style={getStyles(Number(option.value), values, theme)}
           >
             {option.label}
           </MenuItem>

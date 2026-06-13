@@ -1,4 +1,3 @@
-import React from "react";
 import { AppDialog } from "../../../../../../components";
 import OnboardingLinkDialogTitle from "./OnboardingLinkDialogTitle";
 import OnboardingLinkDialogContent from "./OnboardingLinkDialogContent";
@@ -8,7 +7,7 @@ interface Props {
   open: boolean;
   handleClose: () => void;
 }
-const OnboardingLinkDialog = ({ id, open, handleClose }: Props) => {
+const OnboardingLinkDialog = ({ open, handleClose }: Props) => {
   return (
     <AppDialog
       open={open}

@@ -1,12 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Box,
-  Typography,
-  TextField,
-  Button,
-  Divider,
-  Stack,
-} from "@mui/material";
+import { Box, Typography, Button, Divider, Stack } from "@mui/material";
 import masterLogo from "../../../../assets/images/sofzenix-logo.png";
 import LoginIcon from "@mui/icons-material/Login";
 import { Input, AppButton, notifier } from "../../../../components";
@@ -14,7 +7,6 @@ import type { LoginFormData, LoginType } from "../type";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { MAX_OTP_COUNT, OTP_TIMER } from "../../../../utils/constant";
 import LoginTypeButtons from "./LoginTypeButtons";
-import googleLogo from "../../../../assets/images/google-logo.png";
 
 const LoginRightContainer = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -32,6 +24,15 @@ const LoginRightContainer = () => {
     email: "",
     password: "",
   });
+
+  const handleLoginTypeChange = (type: LoginType) => {
+    setLoginType(type);
+
+    const params = new URLSearchParams(searchParams);
+    params.set("loginType", type);
+    setSearchParams(params);
+  };
+
   const [otp, setOtp] = useState<string>("");
   const [otpSent, setOtpSent] = useState<boolean>(false);
   const [otpTimer, setOtpTimer] = useState<number>(0);
@@ -93,9 +94,7 @@ const LoginRightContainer = () => {
     startOtpTimer();
     notifier.success("OTP Resent Successfully.");
   };
-  const handleOtpChange = (value: string) => {
-    setState((p) => ({ ...p, otp: value }));
-  };
+
   const handleVerifyOtp = async () => {
     notifier.success("OTP Verified Successfully.");
     navigate("/dashboard");
@@ -132,7 +131,10 @@ const LoginRightContainer = () => {
         </Typography>
 
         <Box sx={{ mt: 2 }}>
-          <LoginTypeButtons loginType={loginType} setLoginType={setLoginType} />
+          <LoginTypeButtons
+            loginType={loginType}
+            setLoginType={handleLoginTypeChange}
+          />
         </Box>
 
         <Stack spacing={1} sx={{ mt: 4 }}>

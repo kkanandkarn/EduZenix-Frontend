@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Paper, Typography, Stack, Grid } from "@mui/material";
 import GroupIcon from "@mui/icons-material/Group";
 import GppGoodIcon from "@mui/icons-material/GppGood";

@@ -10,7 +10,7 @@ export interface TextInputProps {
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
-  ref?: React.Ref<HTMLInputElement>;
+  inputRef?: React.Ref<HTMLInputElement>;
   disabled?: boolean;
   error?: string;
   readonly?: boolean;
@@ -43,8 +43,9 @@ export type InputType =
   | "SingleSelect"
   | "MultiSelect"
   | "outline";
+
 export interface SingleSelectOptions {
-  value: number;
+  value: string | number;
   label: string;
 }
 export interface OutlineSelectProps {

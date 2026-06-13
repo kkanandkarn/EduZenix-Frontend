@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   InputAdornment,
   OutlinedInput,
@@ -33,7 +33,7 @@ const SearchInput = (props: TextInputProps) => {
       required={props.required}
       disabled={props.disabled}
       autoFocus={props.autoFocus}
-      inputRef={props.ref}
+      inputRef={props.inputRef}
       size="small"
       fullWidth={props.fullWidth}
       startAdornment={

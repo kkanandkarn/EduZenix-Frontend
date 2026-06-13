@@ -1,4 +1,4 @@
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import React, { useState } from "react";
 import Input from "../ui/Input";
 import AppButton from "../ui/AppButton";
@@ -29,7 +29,6 @@ const TableTopBar = ({
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const handleApply = () => {
-    // TODO: read filter state from children and apply
     setDrawerOpen(false);
     handleApplyFilter?.();
   };

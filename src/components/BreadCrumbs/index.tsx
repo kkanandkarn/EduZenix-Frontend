@@ -1,10 +1,9 @@
-import React from "react";
-import { generateBreadcrumbs } from "../../features/Breadcrumbs/breadcrumbs";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import { useBreadcrumbs } from "../../hooks/useBreadcrumbs";
 
 const BreadCrumbs = () => {
-  const breadcrumbs = generateBreadcrumbs();
+  const breadcrumbs = useBreadcrumbs();
   return (
     <Breadcrumbs
       separator={<NavigateNextIcon fontSize="small" />}

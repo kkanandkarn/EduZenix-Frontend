@@ -2,9 +2,7 @@ import { Box } from "@mui/material";
 import React from "react";
 import AppAccordion from "../AppAccordion";
 import MultiSelect from "../Input/MultiSelect";
-import TextInput from "../Input/TextInput";
-import type { FilterRange } from "../../../pages/Admin/Crm/Leads/types";
-import type { TableFilters } from "../../../types/Table";
+import type { FilterRange, TableFilters } from "../../../types";
 import Input from "../Input";
 import SingleSelect from "../Input/SingleSelect";
 

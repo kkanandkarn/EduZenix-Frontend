@@ -1,6 +1,4 @@
-import React from "react";
 import type { TableState } from "../types";
-import { useNavigate } from "react-router-dom";
 import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Box, Chip, Typography } from "@mui/material";
 import {

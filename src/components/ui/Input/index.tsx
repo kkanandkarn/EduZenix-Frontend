@@ -9,16 +9,16 @@ import NumberInput from "./NumberInput";
 import OutlineInput from "./OutlineInput";
 
 const Input = (props: InputProps) => {
-  const COMPONENT_MAP: Record<InputType, React.FC<any>> = {
+  const COMPONENT_MAP = {
     text: TextInput,
     number: NumberInput,
     password: PasswordInput,
     otp: OTPInput,
     search: SearchInput,
-    SingleSelect: SingleSelect,
-    MultiSelect: MultiSelect,
+    SingleSelect,
+    MultiSelect,
     outline: OutlineInput,
-  };
+  } as unknown as Record<InputType, React.ComponentType<InputProps>>;
   const Component = COMPONENT_MAP[props.type];
 
   return Component ? <Component {...props} /> : null;

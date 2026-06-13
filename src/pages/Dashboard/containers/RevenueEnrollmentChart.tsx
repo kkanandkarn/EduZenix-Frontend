@@ -9,12 +9,26 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import type { TooltipProps } from "recharts";
+import type {
+  ValueType,
+  NameType,
+} from "recharts/types/component/DefaultTooltipContent";
 // -------------------- Types --------------------
 type ChartData = {
   month: string;
   Revenue: number;
   Enrollments: number;
+};
+
+type CustomTooltipProps = {
+  active?: boolean;
+  label?: string | number;
+  payload?: Array<{
+    name?: NameType;
+    value?: ValueType;
+    color?: string;
+    dataKey?: string | number;
+  }>;
 };
 
 // -------------------- Data --------------------
@@ -28,11 +42,7 @@ const data: ChartData[] = [
 ];
 
 // -------------------- Custom Tooltip --------------------
-const CustomTooltip = ({
-  active,
-  payload,
-  label,
-}: TooltipProps<number, string>) => {
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   if (active && payload?.length) {
     return (
       <Paper

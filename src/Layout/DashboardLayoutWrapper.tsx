@@ -1,7 +1,5 @@
 // DashboardLayoutBasic.tsx
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import { createTheme } from "@mui/material/styles";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import {
@@ -11,7 +9,6 @@ import {
 } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { LOGO_IMAGE } from "../utils/constant";
 import HandshakeIcon from "@mui/icons-material/Handshake";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
@@ -169,7 +166,7 @@ export default function DashboardLayoutBasic() {
         setSession(null);
       },
     }),
-    [],
+    [navigate],
   );
 
   return (
