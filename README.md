@@ -1,75 +1,92 @@
-# React + TypeScript + Vite
+# EduZenix
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+EduZenix is a multi-tenant SaaS ERP platform designed for universities, colleges, and schools to manage academics, administration, and operations from a single unified system.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Student Information System (admissions, enrollment, profiles, records)
+- Academic Management (courses, classes, timetables, attendance)
+- Examination & Grading
+- Fee Management & Online Payments
+- Staff & HR Management
+- Library Management
+- Hostel & Transport Management
+- Notifications & Communication (email/SMS)
+- Role-based Access Control (Admin, Staff, Teacher, Student, Parent)
+- Multi-tenant Architecture for managing multiple institutions
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+**Frontend**
 
-Note: This will impact Vite dev & build performances.
+- React
+- TypeScript
+- Material UI (MUI)
+- React Router
+- Redux
+- RTK Query
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```
+eduzenix/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── layouts/
+│   │   ├── features/
+│   │   ├── store/
+│   │   ├── routes/
+│   │   ├── utils/
+│   │   └── App.tsx
+│   ├── public/
+│   └── package.json
+└── README.md
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Getting Started
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+### Prerequisites
 
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+- Node.js (v18+)
+- npm or yarn
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/kkanandkarn/EduZenix-Frontend.git
+cd EduZenix-Frontend
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
 ```
+
+### Environment Variables
+
+Create a `.env` file in the frontend root:
+
+```
+VITE_API_BASE_URL = "http://localhost:8000/api"
+VITE_NODE_ENV = "development"
+```
+
+## Available Scripts
+
+- `npm run dev` – Run the app in development mode
+- `npm run build` – Build the app for production
+- `npm run lint` – Run linter
+
+## Roadmap
+
+- [ ] Multi-tenant onboarding flow
+- [ ] Role-based dashboards
+- [ ] Attendance & grading modules
+- [ ] Fee & payment gateway integration
+- [ ] Mobile responsive UI
+- [ ] Reports & analytics
+
+## Contact
+
+For queries or support, reach out via GitHub Issues.
