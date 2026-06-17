@@ -9,8 +9,6 @@ import EmailIcon from "@mui/icons-material/Email";
 import LocationPinIcon from "@mui/icons-material/LocationPin";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
-import CorporateFareOutlinedIcon from "@mui/icons-material/CorporateFareOutlined";
-import ApartmentOutlinedIcon from "@mui/icons-material/ApartmentOutlined";
 
 import { DetailsChip } from "../../../containers";
 import InstitutionDetailsAuthor from "./InstitutionDetailsAuthor";
