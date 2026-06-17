@@ -1,4 +1,4 @@
-import { AppDialog } from "../../../../../../components";
+import { AppDialog } from "../../../../../components";
 import OnboardingLinkDialogTitle from "./OnboardingLinkDialogTitle";
 import OnboardingLinkDialogContent from "./OnboardingLinkDialogContent";
 

@@ -1,3 +1,4 @@
+export type { TableFilters, TableState } from "../../../../../types";
 export interface CollegeFilters {
   state: string[] | null;
   district: string[] | null;
@@ -37,3 +38,35 @@ export type UniversityType =
   | "Deemed University-Government Aided"
   | "Deemed University-Government"
   | "State Private University";
+export type ModalTypes = "VIEW" | "ONBOARDING_LINK" | "ONBOARDING_EMAIL";
+
+export type CollegeLocation = "Urban" | "Rural";
+export type CollegeStatus =
+  | "Pending"
+  | "Requested To Admin"
+  | "Approved"
+  | "Rejected";
+export interface CollegeDetails {
+  id: string;
+  aisheCode: string;
+  name: string;
+  state: string;
+  district: string;
+  website: string | null;
+  yearOfEstablishment: number | null;
+  location: CollegeLocation;
+  collegeType: CollegeType;
+  management: Management;
+  universityName: string;
+  universityType: UniversityType;
+  email: string | null;
+  contact: string | null;
+  status: CollegeStatus;
+  address: string;
+  author?: CollegeAuthorDetails;
+}
+export interface CollegeAuthorDetails {
+  createdBy: string;
+  updatedAt: string;
+  remarks: string;
+}

@@ -8,7 +8,7 @@ import {
   TabButtons,
   TableTopBar,
 } from "../../../../components";
-import CollegeStats from "./containers/CollegeStats";
+import { CollegeTable, CollegeStats } from "./containers";
 
 const CollegePage = () => {
   const initialFilters: CollegeFilters = {
@@ -295,6 +295,10 @@ const CollegePage = () => {
         {" "}
         <TabButtons value={status} tabs={tabs} onChange={handleTabChange} />
       </Paper>
+      <Box sx={{ mt: 2 }}>
+        {" "}
+        <CollegeTable tableState={state} handleChange={handleChange} />
+      </Box>
     </Box>
   );
 };
