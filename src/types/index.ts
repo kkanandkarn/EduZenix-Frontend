@@ -28,3 +28,8 @@ export interface TableFilterOptions {
   value: string | number;
   label: string;
 }
+export type SearchColumn = {
+  key: string;
+  label: string;
+  default?: boolean;
+};

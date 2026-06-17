@@ -20,7 +20,7 @@ const OnboardingLinkDialogTitle = () => {
           variant="body2"
           sx={{ color: "var(--slate-600)", fontSize: 14 }}
         >
-          Generate and track secureonboarding link for this institution
+          Generate and track secureonboarding link for this university
         </Typography>
       </Box>
     </Box>

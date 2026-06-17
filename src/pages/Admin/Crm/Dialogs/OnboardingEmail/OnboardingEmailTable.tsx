@@ -5,7 +5,7 @@ import {
   AppButton,
   AppTable,
   SerialNumberCell,
-} from "../../../../../../components";
+} from "../../../../../components";
 import type { TableState } from "../../types";
 import SendIcon from "@mui/icons-material/Send";
 

@@ -1,6 +1,6 @@
-import { AppDialog } from "../../../../../../components";
 import OnboardingEmailDialogTitle from "./OnboardingEmailDialogTitle";
 import OnboardingEmailContent from "./OnboardingEmailContent";
+import { AppDialog } from "../../../../../components";
 
 interface Props {
   id: string;
