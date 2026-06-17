@@ -39,7 +39,7 @@ const NAVIGATION: Navigation = [
       },
       { segment: "college", title: "College", icon: <SchoolIcon /> },
       {
-        segment: "otherInstitutions",
+        segment: "other-institutions",
         title: "Other Institutions",
         icon: <BusinessIcon />,
       },

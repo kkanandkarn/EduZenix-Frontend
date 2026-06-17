@@ -13,6 +13,9 @@ const CrmUniversityPage = lazy(
 const CrmCollegePage = lazy(
   () => import("../pages/Admin/Crm/College/CollegePage"),
 );
+const OtherInstitutionsPage = lazy(
+  () => import("../pages/Admin/Crm/OtherInstitutions/OtherInstitutionsPage"),
+);
 
 const PageRoutes = () => {
   return (
@@ -24,6 +27,10 @@ const PageRoutes = () => {
         <Route path="/leads/:id" element={<LeadsActivityPage />} />
         <Route path="/institution/university" element={<CrmUniversityPage />} />
         <Route path="/institution/college" element={<CrmCollegePage />} />
+        <Route
+          path="/institution/other-institutions"
+          element={<OtherInstitutionsPage />}
+        />
       </Route>
     </Routes>
   );
