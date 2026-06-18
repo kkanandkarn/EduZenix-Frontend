@@ -42,7 +42,8 @@ export type InputType =
   | "search"
   | "SingleSelect"
   | "MultiSelect"
-  | "outline";
+  | "outline"
+  | "date";
 
 export interface SingleSelectOptions {
   value: string | number;

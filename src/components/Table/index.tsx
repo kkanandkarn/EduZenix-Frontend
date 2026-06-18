@@ -55,10 +55,17 @@ export default function AppTable<T extends GridValidRowModel>({
         slotProps={{
           pagination: { handleChange }, // 👈 forward prop into slot
         }}
-        sx={{ borderRadius: "18px" }}
+        sx={{
+          borderRadius: "18px",
+          "& .MuiDataGrid-cell": {
+            alignItems: "center", // ← forces vertical center on all cells
+            display: "flex",
+          },
+        }}
         disableRowSelectionOnClick
         onSortModelChange={handleSortModelChange}
         rowCount={total}
+        getRowHeight={() => "auto"}
       />
     </Box>
   );

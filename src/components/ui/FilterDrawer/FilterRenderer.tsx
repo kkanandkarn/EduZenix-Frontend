@@ -28,7 +28,7 @@ const FilterRenderer = <T extends { [K in keyof T]: unknown }>({
       setAppliedFilters((prev) => ({ ...prev, [key]: values }));
     };
 
-  const handleRangeChange =
+  const handleNumberRangeChange =
     (key: StringKeyOf<T>, bound: "gte" | "lte") =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const raw = e.target.value;
@@ -38,6 +38,20 @@ const FilterRenderer = <T extends { [K in keyof T]: unknown }>({
         [key]: {
           ...((prev[key] as FilterRange) ?? {}),
           [bound]: num,
+        },
+      }));
+    };
+
+  const handleDateRangeChange =
+    (key: StringKeyOf<T>, bound: "gte" | "lte") =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const raw = e.target.value;
+      const value = raw === "" ? undefined : raw;
+      setAppliedFilters((prev) => ({
+        ...prev,
+        [key]: {
+          ...((prev[key] as FilterRange) ?? {}),
+          [bound]: value,
         },
       }));
     };
@@ -88,7 +102,10 @@ const FilterRenderer = <T extends { [K in keyof T]: unknown }>({
             placeholder="e.g. 10"
             name={`${filter.key}-gte`}
             value={range.gte ?? ""}
-            onChange={handleRangeChange(filter.key as StringKeyOf<T>, "gte")}
+            onChange={handleNumberRangeChange(
+              filter.key as StringKeyOf<T>,
+              "gte",
+            )}
           />
           <Input
             type="number"
@@ -97,7 +114,42 @@ const FilterRenderer = <T extends { [K in keyof T]: unknown }>({
             placeholder="e.g. 100"
             name={`${filter.key}-lte`}
             value={range.lte ?? ""}
-            onChange={handleRangeChange(filter.key as StringKeyOf<T>, "lte")}
+            onChange={handleNumberRangeChange(
+              filter.key as StringKeyOf<T>,
+              "lte",
+            )}
+          />
+        </Box>
+      );
+    }
+    if (filter.dataType === "DateRange") {
+      const range =
+        (appliedFilters[filter.key as StringKeyOf<T>] as FilterRange) ?? {};
+      return (
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Input
+            type="date"
+            label="From"
+            variant="outlined"
+            placeholder="e.g. 10"
+            name={`${filter.key}-gte`}
+            value={range.gte ?? ""}
+            onChange={handleDateRangeChange(
+              filter.key as StringKeyOf<T>,
+              "gte",
+            )}
+          />
+          <Input
+            type="date"
+            label="To"
+            variant="outlined"
+            placeholder="e.g. 100"
+            name={`${filter.key}-lte`}
+            value={range.lte ?? ""}
+            onChange={handleDateRangeChange(
+              filter.key as StringKeyOf<T>,
+              "lte",
+            )}
           />
         </Box>
       );

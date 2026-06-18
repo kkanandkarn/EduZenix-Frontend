@@ -7,6 +7,7 @@ import SingleSelect from "./SingleSelect";
 import MultiSelect from "./MultiSelect";
 import NumberInput from "./NumberInput";
 import OutlineInput from "./OutlineInput";
+import DateInput from "./DateInput";
 
 const Input = (props: InputProps) => {
   const COMPONENT_MAP = {
@@ -18,6 +19,7 @@ const Input = (props: InputProps) => {
     SingleSelect,
     MultiSelect,
     outline: OutlineInput,
+    date: DateInput,
   } as unknown as Record<InputType, React.ComponentType<InputProps>>;
   const Component = COMPONENT_MAP[props.type];
 

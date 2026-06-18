@@ -18,3 +18,12 @@ export const formatTime = (isoString: string): string => {
     timeZone: "Asia/Kolkata",
   });
 };
+export const formatDateTime = (isoString: string): string => {
+  return `${formatDate(isoString)} ${formatTime(isoString)}`;
+};
+export const toTitleCase = (text: string): string => {
+  return text
+    .replace(/([A-Z])/g, " $1")
+    .replace(/^./, (char) => char.toUpperCase())
+    .trim();
+};
