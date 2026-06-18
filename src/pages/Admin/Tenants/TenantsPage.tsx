@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import { BreadCrumbs, FilterRenderer, TableTopBar } from "../../../components";
 import { TenantsMetricsCard, TenantsTable } from "./containers";
 import type {

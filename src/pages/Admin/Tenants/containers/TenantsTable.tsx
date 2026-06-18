@@ -287,7 +287,7 @@ const TenantsTable = ({ tableState, handleChange }: Props) => {
       headerAlign: "center",
       align: "center",
       sortable: false,
-      renderCell: (params: GridRenderCellParams) => (
+      renderCell: () => (
         <AppMenu
           trigger={(openMenu) => (
             <IconButton size="small" onClick={openMenu}>
