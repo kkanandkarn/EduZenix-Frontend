@@ -13,7 +13,8 @@ export interface FilterOption {
 export type TableFiltersDataType =
   | "MultiSelect"
   | "NumericRange"
-  | "SingleSelect";
+  | "SingleSelect"
+  | "DateRange";
 export type TableFilters = {
   key: string;
   dataType: TableFiltersDataType;
