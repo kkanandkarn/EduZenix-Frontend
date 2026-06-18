@@ -15,7 +15,8 @@ export const BREADCRUMB_MAP: Record<string, BreadcrumbConfig> = {
   ],
   "/institution/university": [{ label: "University" }],
   "/institution/college": [{ label: "College" }],
-  "/institution/otherInstitutions": [{ label: "Other Institutions" }],
+  "/institution/other-institutions": [{ label: "Other Institutions" }],
+  "/institution/school": [{ label: "School" }],
 };
 
 const matchRoute = (pattern: string, pathname: string): boolean => {

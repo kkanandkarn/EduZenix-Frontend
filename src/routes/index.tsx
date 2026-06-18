@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import DashboardLayoutWrapper from "../Layout/DashboardLayoutWrapper";
 const DashboardPage = lazy(() => import("../pages/Dashboard/DashboardPage"));
 const LoginPage = lazy(() => import("../pages/Auth/Login/LoginPage"));
@@ -13,8 +13,11 @@ const CrmUniversityPage = lazy(
 const CrmCollegePage = lazy(
   () => import("../pages/Admin/Crm/College/CollegePage"),
 );
-const OtherInstitutionsPage = lazy(
+const CrmOtherInstitutionsPage = lazy(
   () => import("../pages/Admin/Crm/OtherInstitutions/OtherInstitutionsPage"),
+);
+const CrmSchoolPage = lazy(
+  () => import("../pages/Admin/Crm/School/SchoolPage"),
 );
 
 const PageRoutes = () => {
@@ -25,12 +28,16 @@ const PageRoutes = () => {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/leads" element={<LeadsPage />} />
         <Route path="/leads/:id" element={<LeadsActivityPage />} />
-        <Route path="/institution/university" element={<CrmUniversityPage />} />
-        <Route path="/institution/college" element={<CrmCollegePage />} />
-        <Route
-          path="/institution/other-institutions"
-          element={<OtherInstitutionsPage />}
-        />
+        <Route path="/institution">
+          <Route index element={<Navigate to="university" replace />} />
+          <Route path="university" element={<CrmUniversityPage />} />
+          <Route path="college" element={<CrmCollegePage />} />
+          <Route
+            path="other-institutions"
+            element={<CrmOtherInstitutionsPage />}
+          />
+          <Route path="school" element={<CrmSchoolPage />} />
+        </Route>
       </Route>
     </Routes>
   );
