@@ -9,7 +9,7 @@ const AppButton = (props: ButtonProps) => {
       fullWidth={props.fullWidth ?? false}
       disabled={props.disabled}
       onClick={props.onClick}
-      sx={{ textTransform: props.textTransform ?? "capitalize" }}
+      sx={{ textTransform: props.textTransform ?? "capitalize", ...props.sx }}
     >
       {props.label}
     </Button>

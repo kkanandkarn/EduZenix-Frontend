@@ -8,6 +8,10 @@ import type {
 export const BREADCRUMB_MAP: Record<string, BreadcrumbConfig> = {
   "/dashboard": [{ label: "Dashboard" }],
   "/tenants": [{ label: "Tenants" }],
+  "/tenants/add": () => [
+    { label: "Tenants", route: "/tenants" },
+    { label: "Add New Tenant" },
+  ],
   "/leads": [{ label: "Leads" }],
   "/leads/:id": () => [
     { label: "Leads", route: "/leads" },

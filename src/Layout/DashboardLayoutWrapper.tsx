@@ -132,14 +132,30 @@ export default function DashboardLayoutBasic() {
     };
   }, []);
 
-  const router = React.useMemo(
-    () => ({
-      pathname: location.pathname,
+  const router = React.useMemo(() => {
+    // Find the longest matching nav segment for the current path
+    const knownSegments = NAVIGATION.flatMap((item) => {
+      if (!("segment" in item)) return [];
+      const parent = item.segment as string;
+      const children =
+        (item as any).children?.map((c: any) => `${parent}/${c.segment}`) ?? [];
+      return [parent, ...children];
+    });
+
+    const matchedSegment = knownSegments
+      .filter((seg) => location.pathname.startsWith("/" + seg))
+      .sort((a, b) => b.length - a.length)[0]; // longest match wins
+
+    const effectivePath = matchedSegment
+      ? "/" + matchedSegment
+      : location.pathname;
+
+    return {
+      pathname: effectivePath, // ← Toolpad sees a known path
       searchParams: new URLSearchParams(location.search),
       navigate: (path: string | URL) => navigate(String(path)),
-    }),
-    [location, navigate],
-  );
+    };
+  }, [location, navigate]);
 
   const [session, setSession] = React.useState<Session | null>({
     user: {

@@ -20,6 +20,9 @@ const CrmSchoolPage = lazy(
   () => import("../pages/Admin/Crm/School/SchoolPage"),
 );
 const TenantsPage = lazy(() => import("../pages/Admin/Tenants/TenantsPage"));
+const AddTenantPage = lazy(
+  () => import("../pages/Admin/Tenants/AddTenantPage"),
+);
 
 const PageRoutes = () => {
   return (
@@ -39,7 +42,10 @@ const PageRoutes = () => {
           />
           <Route path="school" element={<CrmSchoolPage />} />
         </Route>
-        <Route path="/tenants" element={<TenantsPage />} />
+        <Route path="/tenants">
+          <Route index element={<TenantsPage />} />
+          <Route path="add" element={<AddTenantPage />} />
+        </Route>
       </Route>
     </Routes>
   );

@@ -1,6 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import { useState } from "react";
-import { BreadCrumbs, FilterRenderer, TableTopBar } from "../../../components";
+import {
+  AppButton,
+  BreadCrumbs,
+  FilterRenderer,
+  TableTopBar,
+} from "../../../components";
 import { TenantsMetricsCard, TenantsTable } from "./containers";
 import type {
   SearchColumn,
@@ -8,8 +13,12 @@ import type {
   TableState,
   TenantsFilters,
 } from "./types";
+import HandshakeIcon from "@mui/icons-material/Handshake";
+import { useNavigate } from "react-router-dom";
+import DescriptionIcon from "@mui/icons-material/Description";
 
 const TenantsPage = () => {
+  const navigate = useNavigate();
   const initialFilters: TenantsFilters = {
     status: null,
     expireDate: null,
@@ -95,16 +104,38 @@ const TenantsPage = () => {
   return (
     <Box sx={{ paddingY: 2, paddingX: 4 }}>
       <BreadCrumbs />
-      <Box sx={{ marginY: 2 }}>
-        <Typography
-          variant="h6"
-          sx={{ fontWeight: "semibold", color: "var(--slate-800)" }}
-        >
-          Tenant partners
-        </Typography>
-        <Typography className="text-slate-600">
-          Manage and monitor tenant's subscriptions across the ecosystem
-        </Typography>
+      <Box
+        sx={{
+          marginY: 2,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Box>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: "semibold", color: "var(--slate-800)" }}
+          >
+            Tenant partners
+          </Typography>
+          <Typography className="text-slate-600">
+            Manage and monitor tenant's subscriptions across the ecosystem
+          </Typography>
+        </Box>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <AppButton
+            label="Drafts"
+            variant="outlined"
+            startIcon={<DescriptionIcon />}
+            // onClick={() => navigate("/tenants/add")}
+          />
+          <AppButton
+            label="Add New Tenant"
+            startIcon={<HandshakeIcon />}
+            onClick={() => navigate("/tenants/add")}
+          />
+        </Box>
       </Box>
       <TenantsMetricsCard />
       <TableTopBar
