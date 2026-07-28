@@ -135,10 +135,14 @@ export default function DashboardLayoutBasic() {
   const router = React.useMemo(() => {
     // Find the longest matching nav segment for the current path
     const knownSegments = NAVIGATION.flatMap((item) => {
-      if (!("segment" in item)) return [];
-      const parent = item.segment as string;
+      if (!("segment" in item) || !item.segment) return [];
+      const parent = item.segment;
       const children =
-        (item as any).children?.map((c: any) => `${parent}/${c.segment}`) ?? [];
+        item.children?.flatMap((child) =>
+          "segment" in child && child.segment
+            ? [`${parent}/${child.segment}`]
+            : [],
+        ) ?? [];
       return [parent, ...children];
     });
 

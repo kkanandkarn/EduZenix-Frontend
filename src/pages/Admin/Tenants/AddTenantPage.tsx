@@ -1,10 +1,14 @@
 import { Box, Typography } from "@mui/material";
-import { BreadCrumbs } from "../../../components";
+import { AppButton, BreadCrumbs } from "../../../components";
 import { useState } from "react";
 import type { AddTenantInput, AddTenantInputError } from "./types";
 import { AddTenantDetails, AddTenantModules } from "./containers";
+import DescriptionIcon from "@mui/icons-material/Description";
+import SaveIcon from "@mui/icons-material/Save";
+import { useNavigate } from "react-router-dom";
 
 const AddTenantPage = () => {
+  const navigate = useNavigate();
   const [state, setState] = useState<AddTenantInput>({
     tenantImage: "",
     tenantName: "",
@@ -35,17 +39,42 @@ const AddTenantPage = () => {
       <Box
         sx={{
           marginY: 2,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
       >
-        <Typography
-          variant="h6"
-          sx={{ fontWeight: "semibold", color: "var(--slate-800)" }}
+        <Box>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: "semibold", color: "var(--slate-800)" }}
+          >
+            Add New Tenant
+          </Typography>
+          <Typography className="text-slate-600">
+            Set up a new tenant with their details and subscription plan
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 2,
+          }}
         >
-          Add New Tenant
-        </Typography>
-        <Typography className="text-slate-600">
-          Set up a new tenant with their details and subscription plan
-        </Typography>
+          <AppButton
+            label="Save as Draft"
+            variant="outlined"
+            startIcon={<DescriptionIcon />}
+            // onClick={() => navigate("/tenants/add")}
+          />
+          <AppButton
+            label="Create Tenant"
+            startIcon={<SaveIcon />}
+            onClick={() => navigate("/tenants")}
+          />
+        </Box>
       </Box>
       <Box
         sx={{
