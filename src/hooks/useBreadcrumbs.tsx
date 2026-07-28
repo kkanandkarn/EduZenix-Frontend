@@ -8,6 +8,10 @@ import type {
 export const BREADCRUMB_MAP: Record<string, BreadcrumbConfig> = {
   "/dashboard": [{ label: "Dashboard" }],
   "/tenants": [{ label: "Tenants" }],
+  "/tenants/add": () => [
+    { label: "Tenants", route: "/tenants" },
+    { label: "Add New Tenant" },
+  ],
   "/leads": [{ label: "Leads" }],
   "/leads/:id": () => [
     { label: "Leads", route: "/leads" },
@@ -17,6 +21,7 @@ export const BREADCRUMB_MAP: Record<string, BreadcrumbConfig> = {
   "/institution/college": [{ label: "College" }],
   "/institution/other-institutions": [{ label: "Other Institutions" }],
   "/institution/school": [{ label: "School" }],
+  "/roles": [{ label: "Roles" }],
 };
 
 const matchRoute = (pattern: string, pathname: string): boolean => {

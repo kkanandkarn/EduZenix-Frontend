@@ -1,4 +1,5 @@
 import type { SvgIconComponent } from "@mui/icons-material";
+import type { SxProps, Theme } from "@mui/material/styles";
 
 export interface TextInputProps {
   type: InputType;
@@ -79,4 +80,5 @@ export interface ButtonProps {
   label: string;
   fullWidth?: boolean;
   textTransform?: TextTransform;
+  sx?: SxProps<Theme>;
 }
