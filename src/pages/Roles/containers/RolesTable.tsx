@@ -1,5 +1,5 @@
 import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import { Typography, IconButton } from "@mui/material";
+import { Typography, IconButton, Chip, Box } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { AppTable, AppMenu, SerialNumberCell } from "../../../components";
 import type { TableState } from "../types";
@@ -20,6 +20,7 @@ const RolesTable = ({ tableState, handleChange }: Props) => {
       roleName: "Admin",
       roleType: "admin",
       totalUsers: 1,
+      status: "ACTIVE",
       createdAt: "2026-06-20T12:36:58.761Z",
     },
     {
@@ -27,6 +28,7 @@ const RolesTable = ({ tableState, handleChange }: Props) => {
       roleName: "Accountant",
       roleType: "general",
       totalUsers: 8,
+      status: "ACTIVE",
       createdAt: "2026-06-20T12:36:58.761Z",
     },
     {
@@ -34,6 +36,7 @@ const RolesTable = ({ tableState, handleChange }: Props) => {
       roleName: "HR Manager",
       roleType: "general",
       totalUsers: 5,
+      status: "ACTIVE",
       createdAt: "2026-06-21T09:15:22.134Z",
     },
     {
@@ -41,6 +44,7 @@ const RolesTable = ({ tableState, handleChange }: Props) => {
       roleName: "Finance Manager",
       roleType: "general",
       totalUsers: 4,
+      status: "ACTIVE",
       createdAt: "2026-06-21T11:45:10.891Z",
     },
     {
@@ -48,6 +52,7 @@ const RolesTable = ({ tableState, handleChange }: Props) => {
       roleName: "Admissions Manager",
       roleType: "general",
       totalUsers: 7,
+      status: "HOLD",
       createdAt: "2026-06-22T08:30:44.123Z",
     },
     {
@@ -55,6 +60,7 @@ const RolesTable = ({ tableState, handleChange }: Props) => {
       roleName: "Faculty Coordinator",
       roleType: "general",
       totalUsers: 12,
+      status: "HOLD",
       createdAt: "2026-06-22T14:20:18.456Z",
     },
     {
@@ -62,6 +68,7 @@ const RolesTable = ({ tableState, handleChange }: Props) => {
       roleName: "Library Manager",
       roleType: "general",
       totalUsers: 3,
+      status: "ACTIVE",
       createdAt: "2026-06-23T10:05:55.678Z",
     },
     {
@@ -69,6 +76,7 @@ const RolesTable = ({ tableState, handleChange }: Props) => {
       roleName: "Transport Manager",
       roleType: "general",
       totalUsers: 2,
+      status: "ACTIVE",
       createdAt: "2026-06-23T16:12:39.012Z",
     },
     {
@@ -76,6 +84,7 @@ const RolesTable = ({ tableState, handleChange }: Props) => {
       roleName: "Student Counselor",
       roleType: "general",
       totalUsers: 9,
+      status: "ACTIVE",
       createdAt: "2026-06-24T09:50:27.345Z",
     },
     {
@@ -83,6 +92,7 @@ const RolesTable = ({ tableState, handleChange }: Props) => {
       roleName: "Receptionist",
       roleType: "general",
       totalUsers: 6,
+      status: "ACTIVE",
       createdAt: "2026-06-24T15:40:12.789Z",
     },
   ];
@@ -121,6 +131,46 @@ const RolesTable = ({ tableState, handleChange }: Props) => {
       disableColumnMenu: true,
       ...columnAlign,
       flex: 1.5,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      disableColumnMenu: true,
+      headerAlign: "center",
+      align: "center",
+      sortable: false,
+      width: 160,
+      renderCell: (params: GridRenderCellParams) => {
+        const status = params.row.status;
+        const isActive = status === "ACTIVE";
+        return (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "100%",
+            }}
+          >
+            <Chip
+              label={status}
+              size="small"
+              sx={{
+                fontWeight: 600,
+                fontSize: "11px",
+                color: isActive ? "var(--green-700)" : "var(--yellow-700)",
+                backgroundColor: isActive
+                  ? "var(--green-50)"
+                  : "var(--yellow-50)",
+                border: "1px solid",
+                borderColor: isActive
+                  ? "var(--green-200)"
+                  : "var(--yellow-200)",
+              }}
+            />
+          </Box>
+        );
+      },
     },
 
     {
