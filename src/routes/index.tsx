@@ -23,6 +23,8 @@ const TenantsPage = lazy(() => import("../pages/Admin/Tenants/TenantsPage"));
 const AddTenantPage = lazy(
   () => import("../pages/Admin/Tenants/AddTenantPage"),
 );
+const RolesPage = lazy(() => import("../pages/Roles/RolesPage"));
+const RolesFormPage = lazy(() => import("../pages/Roles/RolesFormPage"));
 
 const PageRoutes = () => {
   return (
@@ -46,6 +48,9 @@ const PageRoutes = () => {
           <Route index element={<TenantsPage />} />
           <Route path="add" element={<AddTenantPage />} />
         </Route>
+        <Route path="/roles" element={<RolesPage />} />
+        <Route path="/roles/:mode" element={<RolesFormPage />} />
+        <Route path="/roles/:mode/:id" element={<RolesFormPage />} />
       </Route>
     </Routes>
   );

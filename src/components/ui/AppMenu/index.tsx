@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { Menu, MenuItem, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 
 export interface AppMenuItem {
   label: string;
   icon?: React.ReactNode;
   disabled?: boolean;
+  color?: string;
   onClick?: () => void;
+  component?: "typography" | "link";
+  url?: string;
 }
 
 interface AppMenuProps {
@@ -45,25 +49,35 @@ const AppMenu = ({ trigger, items }: AppMenuProps) => {
           },
         }}
       >
-        {items.map((item) => (
-          <MenuItem
-            key={item.label}
-            onClick={() => {
-              item.onClick?.();
-              handleClose();
-            }}
-            sx={{
-              minHeight: 36,
-              px: 1.5,
-              py: 0.5,
-              gap: 1,
-            }}
-          >
-            {item.icon}
+        {items.map((item) => {
+          const isLink = item.component === "link" && !!item.url;
 
-            <Typography variant="body2">{item.label}</Typography>
-          </MenuItem>
-        ))}
+          return (
+            <MenuItem
+              key={item.label}
+              disabled={item.disabled}
+              {...(isLink ? { component: Link, to: item.url as string } : {})}
+              onClick={() => {
+                item.onClick?.();
+                handleClose();
+              }}
+              sx={{
+                minHeight: 36,
+                px: 1.5,
+                py: 0.5,
+                gap: 1,
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              {item.icon}
+
+              <Typography variant="body2" sx={{ color: item.color }}>
+                {item.label}
+              </Typography>
+            </MenuItem>
+          );
+        })}
       </Menu>
     </>
   );
