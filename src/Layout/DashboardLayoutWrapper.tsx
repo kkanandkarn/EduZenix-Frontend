@@ -21,7 +21,7 @@ import ToolbarActions from "./ToolbarActions";
 import AppTitle from "./AppTitle";
 
 const NAVIGATION: Navigation = [
-  { kind: "header", title: "Main items" },
+  { kind: "header", title: "Overview" },
   { segment: "dashboard", title: "Dashboard", icon: <DashboardIcon /> },
   { segment: "tenants", title: "Tenants", icon: <HandshakeIcon /> },
   { kind: "divider" },
