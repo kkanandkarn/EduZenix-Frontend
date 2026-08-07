@@ -1,6 +1,6 @@
 import React from "react";
 import { Input } from "../../../components";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Chip, Stack, Typography } from "@mui/material";
 import type { RolesFormState } from "../types";
 import SingleSelect from "../../../components/ui/Input/SingleSelect";
 
@@ -23,7 +23,7 @@ const RolesInput = ({ state, onChange, errors }: Props) => {
       sx={{
         px: 4,
         py: 2,
-        width: "30%",
+        width: "40%",
         bgcolor: "white",
         borderRadius: "16px",
       }}
@@ -51,6 +51,21 @@ const RolesInput = ({ state, onChange, errors }: Props) => {
           placeholder={"Select status"}
           onChange={(value) => onChange("status", value)}
         />
+        {state.status === "HOLD" && (
+          <Chip
+            label={"New users will not be assigned to this role"}
+            size="small"
+            sx={{
+              fontWeight: 600,
+              mt: 2,
+              fontSize: "11px",
+              color: "var(--yellow-700)",
+              backgroundColor: "var(--yellow-50)",
+              border: "1px solid",
+              borderColor: "var(--yellow-200)",
+            }}
+          />
+        )}
       </Box>
     </Stack>
   );
