@@ -120,31 +120,27 @@ const scrollbarStyles = `
     background: transparent;
   }
 
-  /* Dark mode scrollbar */
-  [data-toolpad-color-scheme="dark"] ::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.18);
-  }
-
-  [data-toolpad-color-scheme="dark"] ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(255, 255, 255, 0.35);
-  }
-
   /* Firefox */
   * {
     scrollbar-width: thin;
     scrollbar-color: rgba(0, 0, 0, 0.18) transparent;
   }
-
-  [data-toolpad-color-scheme="dark"] * {
-    scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
-  }
 `;
 
+/**
+ * Toolpad's `AppProvider` renders the theme through MUI's CSS-vars provider in
+ * `system` mode, so declaring a dark colour scheme here is what made the app
+ * follow the browser preference and break the (light-only) design. Shipping a
+ * single `light` scheme means no dark CSS variables are ever generated, the
+ * theme switcher disappears from the layout, and `prefers-color-scheme: dark`
+ * has nothing to switch to.
+ */
 const theme = createTheme({
   cssVariables: {
     colorSchemeSelector: "data-toolpad-color-scheme",
   },
-  colorSchemes: { light: true, dark: true },
+  colorSchemes: { light: true },
+  defaultColorScheme: "light",
   breakpoints: {
     values: { xs: 0, sm: 600, md: 600, lg: 1200, xl: 1536 },
   },

@@ -2,6 +2,11 @@
 @import "tailwindcss";
 
 :root {
+  /* The app has a single, light design. Opting out of the browser's dark
+     preference here keeps native widgets and UA defaults light no matter what
+     the OS/browser is set to. */
+  color-scheme: light;
+
   /* SLATE */
   --slate-50: #f8fafc;
   --slate-100: #f1f5f9;
@@ -121,11 +126,4 @@ html,
 body {
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
-}
-
-/* Dark mode */
-[data-toolpad-color-scheme="dark"] *,
-[data-toolpad-color-scheme="dark"] html,
-[data-toolpad-color-scheme="dark"] body {
-  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
