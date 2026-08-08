@@ -14,7 +14,11 @@ import TableTabs from "./TableTabs";
 import TableToolbar from "./TableToolbar";
 import type { HideableColumn } from "./ColumnsMenu";
 import { describeAppliedFilters } from "./filterUtils";
-import { DEFAULT_PAGE_SIZE_OPTIONS, TABLE_HEADER_HEIGHT } from "./constants";
+import {
+  DEFAULT_PAGE_SIZE_OPTIONS,
+  LIGHT_SCHEME_PROPS,
+  TABLE_HEADER_HEIGHT,
+} from "./constants";
 import {
   dataGridSx,
   skeletonCellSx,
@@ -161,7 +165,7 @@ export default function AppTable<T extends GridValidRowModel>({
   );
 
   return (
-    <Paper elevation={0} sx={tableCardSx}>
+    <Paper elevation={0} sx={tableCardSx} {...LIGHT_SCHEME_PROPS}>
       {tabs && tabs.length > 0 && (
         <TableTabs
           tabs={tabs}
