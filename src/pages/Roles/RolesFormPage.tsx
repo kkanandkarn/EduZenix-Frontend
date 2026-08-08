@@ -16,12 +16,16 @@ const RolesFormPage = () => {
   const [state, setState] = useState<RolesFormState>({
     roleName: "",
     status: "ACTIVE",
+    mfaRequired: false,
   });
   const [error, setErrors] = useState<{ roleName: string }>({
     roleName: "",
   });
 
-  const handleChange = (name: keyof RolesFormState, value: string | number) => {
+  const handleChange = (
+    name: keyof RolesFormState,
+    value: string | number | boolean,
+  ) => {
     setState((p: RolesFormState) => ({ ...p, [name]: value }));
   };
 

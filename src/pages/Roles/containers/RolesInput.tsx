@@ -1,5 +1,5 @@
 import React from "react";
-import { Input } from "../../../components";
+import { AppSwitch, Input } from "../../../components";
 import { Box, Chip, Stack, Typography } from "@mui/material";
 import type { RolesFormState } from "../types";
 import SingleSelect from "../../../components/ui/Input/SingleSelect";
@@ -9,7 +9,10 @@ interface Props {
   errors: {
     roleName: string;
   };
-  onChange: (name: keyof RolesFormState, value: string | number) => void;
+  onChange: (
+    name: keyof RolesFormState,
+    value: string | number | boolean,
+  ) => void;
 }
 const RolesInput = ({ state, onChange, errors }: Props) => {
   const statusOptions = [
@@ -63,6 +66,44 @@ const RolesInput = ({ state, onChange, errors }: Props) => {
               backgroundColor: "var(--yellow-50)",
               border: "1px solid",
               borderColor: "var(--yellow-200)",
+              maxWidth: "100%", // Add this
+              height: "auto", // Add this to allow height to adjust
+              "& .MuiChip-label": {
+                whiteSpace: "normal", // Add this to allow text wrapping
+                display: "block",
+                padding: "8px 12px", // Adjust padding for better appearance
+              },
+            }}
+          />
+        )}
+        <Box sx={{ px: 1, mt: 2 }}>
+          <AppSwitch
+            checked={state.mfaRequired}
+            onChecked={(value) => onChange("mfaRequired", value)}
+            label={"Require MFA"}
+          />
+        </Box>
+        {state.mfaRequired === true && (
+          <Chip
+            label={
+              "Multi-factor authentication (MFA) will be required for users assigned to this role to log in securely."
+            }
+            size="small"
+            sx={{
+              fontWeight: 600,
+              mt: 2,
+              fontSize: "11px",
+              color: "var(--yellow-700)",
+              backgroundColor: "var(--yellow-50)",
+              border: "1px solid",
+              borderColor: "var(--yellow-200)",
+              maxWidth: "100%", // Add this
+              height: "auto", // Add this to allow height to adjust
+              "& .MuiChip-label": {
+                whiteSpace: "normal", // Add this to allow text wrapping
+                display: "block",
+                padding: "8px 12px", // Adjust padding for better appearance
+              },
             }}
           />
         )}

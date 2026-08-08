@@ -6,3 +6,4 @@ export { default as FilterDrawer } from "./FilterDrawer";
 export { default as FilterRenderer } from "./FilterDrawer/FilterRenderer";
 export { default as Input } from "./Input";
 export { default as TabButtons } from "./TabButtons";
+export { default as AppSwitch } from "./AppSwitch";

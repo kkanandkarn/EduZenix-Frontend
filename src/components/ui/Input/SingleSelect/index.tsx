@@ -12,6 +12,7 @@ const SingleSelect = ({
   onChange,
   options,
   label,
+  required = false,
 }: OutlineSelectProps) => {
   const handleChange = (event: SelectChangeEvent) => {
     onChange(event.target.value);
@@ -26,6 +27,7 @@ const SingleSelect = ({
         label={label}
         value={value}
         onChange={handleChange}
+        required={required}
         MenuProps={{
           // ✅ Render inside the drawer's stacking context, not the document body
           disablePortal: true,

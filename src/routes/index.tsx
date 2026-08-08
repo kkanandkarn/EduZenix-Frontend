@@ -25,6 +25,7 @@ const AddTenantPage = lazy(
 );
 const RolesPage = lazy(() => import("../pages/Roles/RolesPage"));
 const RolesFormPage = lazy(() => import("../pages/Roles/RolesFormPage"));
+const UsersPage = lazy(() => import("../pages/Users/UsersPage"));
 
 const PageRoutes = () => {
   return (
@@ -51,6 +52,7 @@ const PageRoutes = () => {
         <Route path="/roles" element={<RolesPage />} />
         <Route path="/roles/:mode" element={<RolesFormPage />} />
         <Route path="/roles/:mode/:id" element={<RolesFormPage />} />
+        <Route path="/users" element={<UsersPage />} />
       </Route>
     </Routes>
   );

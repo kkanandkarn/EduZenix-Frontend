@@ -57,6 +57,7 @@ export interface OutlineSelectProps {
   onChange: (value: string) => void;
   placeholder: string;
   options: SingleSelectOptions[];
+  required?: boolean;
 }
 export type InputProps = TextInputProps | OTPInputProps | OutlineSelectProps;
 
