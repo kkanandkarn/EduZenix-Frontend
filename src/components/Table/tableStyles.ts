@@ -196,7 +196,17 @@ export const pagerButtonSx: SxProps<Theme> = {
  */
 export const dataGridSx = {
   border: "none",
-  "--DataGrid-containerBackground": TABLE_HEADER_BG,
+
+  // The grid paints itself from its own theme variables, which resolve against
+  // the app's colour scheme — in dark mode that turns the surface near-black.
+  // The card is a light surface, so pin them to the table tokens.
+  "--DataGrid-t-color-background-base": TABLE_SURFACE,
+  "--DataGrid-t-color-background-overlay": TABLE_SURFACE,
+  "--DataGrid-t-cell-background-pinned": TABLE_SURFACE,
+  "--DataGrid-t-header-background-base": TABLE_HEADER_BG,
+  "--DataGrid-t-color-foreground-base": TABLE_TEXT,
+  "--DataGrid-t-color-foreground-muted": TABLE_TEXT_MUTED,
+  "--DataGrid-t-color-border-base": TABLE_BORDER,
   "--DataGrid-rowBorderColor": TABLE_ROW_BORDER,
 
   "& .MuiDataGrid-columnHeader": {

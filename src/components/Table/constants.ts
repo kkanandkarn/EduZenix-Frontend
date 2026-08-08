@@ -23,6 +23,17 @@ export const TAB_INACTIVE_TEXT = "var(--slate-500)";
 
 export const DEFAULT_PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 
+/**
+ * The table card is a light surface by design — every colour above is a light
+ * token. The dashboard theme declares `colorSchemeSelector:
+ * "data-toolpad-color-scheme"`, so stamping the attribute on the card
+ * re-declares the MUI palette variables underneath it and keeps the card (and
+ * the MUI controls inside it) light even while the app runs in dark mode.
+ */
+export const LIGHT_SCHEME_PROPS = {
+  "data-toolpad-color-scheme": "light",
+} as const;
+
 // Palette for the count pill rendered next to a tab label.
 export const TAB_COUNT_COLORS = {
   default: { bg: "var(--gray-100)", color: "var(--gray-600)" },
