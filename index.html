@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- The app ships a light design only. Declaring the scheme up front stops
+         the browser from darkening native UI (form controls, scrollbars,
+         autofill) when the OS/browser is in dark mode. -->
+    <meta name="color-scheme" content="light" />
+    <style>
+      :root {
+        color-scheme: light;
+      }
+    </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
