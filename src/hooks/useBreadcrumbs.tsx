@@ -34,6 +34,7 @@ export const BREADCRUMB_MAP: Record<string, BreadcrumbConfig> = {
     { label: "Roles", route: "/roles" },
     { label: "Edit Role Details" },
   ],
+  "/users": [{ label: "Users" }],
 };
 
 const matchRoute = (pattern: string, pathname: string): boolean => {

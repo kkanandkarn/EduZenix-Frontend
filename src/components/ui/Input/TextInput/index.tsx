@@ -3,7 +3,7 @@ import type { TextInputProps } from "../../type";
 
 const TextInput = (props: TextInputProps) => {
   return (
-    <Box sx={{ height: 80 }}>
+    <Box sx={{ height: 80, width: "100%" }}>
       <TextField
         id="outlined-basic"
         label={props.label}
