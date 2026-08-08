@@ -4,6 +4,7 @@ import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import EmailIcon from "@mui/icons-material/Email";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { AppTable, AppMenu, SerialNumberCell } from "../../../../components";
+import type { TableToolbarConfig } from "../../../../components";
 import type { TableState } from "../types";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import WidgetsOutlinedIcon from "@mui/icons-material/WidgetsOutlined";
@@ -14,9 +15,10 @@ import { formatDateTime, toTitleCase } from "../../../../utils/helper";
 interface Props {
   tableState: TableState;
   handleChange: (name: keyof TableState, value: string | number) => void;
+  toolbar?: TableToolbarConfig;
 }
 
-const TenantsTable = ({ tableState, handleChange }: Props) => {
+const TenantsTable = ({ tableState, handleChange, toolbar }: Props) => {
   const rows = [
     {
       id: "cmc8k2x9a0001l704f7v1h2a3",
@@ -154,11 +156,7 @@ const TenantsTable = ({ tableState, handleChange }: Props) => {
       sortable: false,
       width: 60,
       renderCell: (params: GridRenderCellParams) => (
-        <SerialNumberCell
-          rowIndex={rows.findIndex((row) => row.id === params.id)}
-          pageNo={tableState.pageNo}
-          pageSize={tableState.pageSize}
-        />
+        <SerialNumberCell id={params.id} />
       ),
     },
     {
@@ -330,6 +328,8 @@ const TenantsTable = ({ tableState, handleChange }: Props) => {
 
   return (
     <AppTable
+      {...toolbar}
+      rowsLabel="tenants"
       rows={rows}
       columns={columns}
       total={rows.length}

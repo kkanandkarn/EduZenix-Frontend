@@ -5,13 +5,9 @@ import type {
   TableFilters,
   TableState,
 } from "./types";
-import { Box, Paper, Typography } from "@mui/material";
-import {
-  BreadCrumbs,
-  FilterRenderer,
-  TabButtons,
-  TableTopBar,
-} from "../../../../components";
+import { Box } from "@mui/material";
+import { TopBar } from "../../../../components";
+import type { SortColumn, TableTab } from "../../../../components";
 import { OtherInstitutionsStats, OtherInstitutionsTable } from "./containers";
 
 const OtherInstitutionsPage = () => {
@@ -191,98 +187,83 @@ const OtherInstitutionsPage = () => {
       ],
     },
   ];
-  const tabs = [
+  const tabs: TableTab[] = [
     {
       value: "pending",
       label: "Pending",
       count: 1250,
+      color: "warning",
     },
     {
       value: "requestedToAdmin",
       label: "Requested to Admin",
       count: 10,
+      color: "info",
     },
     {
       value: "approved",
       label: "Approved",
       count: 20,
+      color: "success",
     },
     {
       value: "rejected",
       label: "Rejected",
       count: 30,
+      color: "error",
     },
   ];
-  const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
-    setStatus(newValue);
-  };
+  const sortColumns: SortColumn[] = [
+    { key: "name", label: "Name" },
+    { key: "state", label: "State" },
+    { key: "district", label: "City" },
+  ];
 
   const handleChange = (name: keyof TableState, value: string | number) => {
     setState((p: TableState) => ({ ...p, [name]: value }));
   };
-  const handleApplyFilter = () => {
-    console.log("APPLIED FILTERS: ", filters);
+  const handleApplyFilter = (applied: object) => {
+    setFilters(applied as typeof initialFilters);
+    console.log("APPLIED FILTERS: ", applied);
   };
   const handleResetFilters = () => {
     setFilters(initialFilters);
   };
+  const handleRemoveFilter = (key: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      [key]: initialFilters[key as keyof typeof initialFilters],
+    }));
+  };
   return (
-    <Box sx={{ paddingY: 2, paddingX: 4 }}>
-      {" "}
-      <BreadCrumbs />
-      <Box sx={{ marginY: 2 }}>
-        <Box
-          sx={{
-            display: "flex ",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Box>
-            <Typography
-              variant="h6"
-              sx={{ fontWeight: "semibold", color: "var(--slate-800)" }}
-            >
-              Insitutions Management
-            </Typography>
-            <Typography className="text-slate-600">
-              Manage and track Institution accreditation status
-            </Typography>
-          </Box>
+    <>
+      <TopBar
+        title="Institutions Management"
+        description="Manage and track Institution accreditation status"
+      />
+      <Box sx={{ paddingY: 2, paddingX: 4 }}>
+        <OtherInstitutionsStats />
+        <Box sx={{ mt: 3 }}>
+          <OtherInstitutionsTable
+            tableState={state}
+            handleChange={handleChange}
+            toolbar={{
+              tabs,
+              activeTab: status,
+              onTabChange: setStatus,
+              searchColumns,
+              searchPlaceholder: "Search by name, email, phone etc",
+              sortColumns,
+              appliedFilters: filters,
+              columnFilters,
+              onRemoveFilter: handleRemoveFilter,
+              handleApplyFilter,
+              handleResetFilters,
+            }}
+          />
         </Box>
       </Box>
-      <OtherInstitutionsStats />
-      <TableTopBar
-        search={state.search}
-        setSearch={(value) => handleChange("search", value)}
-        setSearchColumn={(value) => handleChange("search", value)}
-        searchColumn={state.searchColumn}
-        searchColumns={searchColumns}
-        filterComponent={
-          <FilterRenderer
-            columnFilters={columnFilters}
-            appliedFilters={filters}
-            setAppliedFilters={setFilters}
-          />
-        }
-        handleApplyFilter={handleApplyFilter}
-        handleResetFilters={handleResetFilters}
-      />
-      <Paper
-        elevation={0}
-        sx={{ paddingY: 1, paddingX: 2, marginTop: 2, borderRadius: 3 }}
-      >
-        {" "}
-        <TabButtons value={status} tabs={tabs} onChange={handleTabChange} />
-      </Paper>
-      <Box sx={{ mt: 2 }}>
-        {" "}
-        <OtherInstitutionsTable
-          tableState={state}
-          handleChange={handleChange}
-        />
-      </Box>
-    </Box>
+    </>
   );
 };
 

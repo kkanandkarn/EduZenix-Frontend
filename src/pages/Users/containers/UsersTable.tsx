@@ -2,19 +2,19 @@ import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Typography, IconButton, Chip, Box } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { AppTable, AppMenu, SerialNumberCell } from "../../../components";
-import type { InviteUserState, TableState } from "../types";
+import type { TableToolbarConfig } from "../../../components";
+import type { TableState } from "../types";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { formatDateTime } from "../../../utils/helper";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useState } from "react";
-
 interface Props {
   tableState: TableState;
   handleChange: (name: keyof TableState, value: string | number) => void;
+  toolbar?: TableToolbarConfig;
 }
 
-const UsersTable = ({ tableState, handleChange }: Props) => {
+const UsersTable = ({ tableState, handleChange, toolbar }: Props) => {
   const rows = [
     {
       id: "cmc8k2x9a0001l704f7v1h2a3",
@@ -126,19 +126,6 @@ const UsersTable = ({ tableState, handleChange }: Props) => {
     },
   ];
 
-  const [state, setState] = useState<InviteUserState>({
-    id: "",
-    name: "",
-    email: "",
-    role: "",
-    mfaRequired: false,
-    status: "ACTIVE",
-  });
-
-  const columnAlign = {
-    headerAlign: "left" as const,
-    align: "left" as const,
-  };
   const columns: GridColDef<(typeof rows)[number]>[] = [
     {
       field: "serialNo",
@@ -149,11 +136,7 @@ const UsersTable = ({ tableState, handleChange }: Props) => {
       sortable: false,
       width: 60,
       renderCell: (params: GridRenderCellParams) => (
-        <SerialNumberCell
-          rowIndex={rows.findIndex((row) => row.id === params.id)}
-          pageNo={tableState.pageNo}
-          pageSize={tableState.pageSize}
-        />
+        <SerialNumberCell id={params.id} />
       ),
     },
     {
@@ -367,6 +350,8 @@ const UsersTable = ({ tableState, handleChange }: Props) => {
 
   return (
     <AppTable
+      {...toolbar}
+      rowsLabel="users"
       rows={rows}
       columns={columns}
       total={rows.length}

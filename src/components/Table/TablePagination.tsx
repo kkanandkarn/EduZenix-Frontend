@@ -1,58 +1,84 @@
-// TablePagination.tsx
-import { Box, Pagination, Typography } from "@mui/material";
-import {
-  useGridApiContext,
-  useGridSelector,
-  gridPageCountSelector,
-  gridPaginationModelSelector,
-  gridRowCountSelector,
-} from "@mui/x-data-grid";
+import { Box, IconButton, MenuItem, Select, Typography } from "@mui/material";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import type { TableState } from "../../types";
-declare module "@mui/x-data-grid" {
-  interface PaginationPropsOverrides {
-    handleChange: (name: keyof TableState, value: string | number) => void;
-  }
-}
+import { TABLE_TEXT_MUTED } from "./constants";
+import { footerRowSx, pageSizeSelectSx, pagerButtonSx } from "./tableStyles";
 
 interface Props {
+  pageNo: number;
+  pageSize: number;
+  total: number;
+  pageSizeOptions: number[];
+  /** Noun appended to the count, e.g. "users". */
+  rowsLabel?: string;
   handleChange: (name: keyof TableState, value: string | number) => void;
 }
 
-export default function TablePagination({ handleChange }: Props) {
-  const apiRef = useGridApiContext();
-  const pageCount = useGridSelector(apiRef, gridPageCountSelector);
-  const paginationModel = useGridSelector(apiRef, gridPaginationModelSelector);
-  const totalRows = useGridSelector(apiRef, gridRowCountSelector);
+/** Row count on the left, page size and page steppers on the right. */
+const TablePagination = ({
+  pageNo,
+  pageSize,
+  total,
+  pageSizeOptions,
+  rowsLabel,
+  handleChange,
+}: Props) => {
+  const pageCount = Math.max(1, Math.ceil(total / pageSize));
+  const from = total === 0 ? 0 : (pageNo - 1) * pageSize + 1;
+  const to = Math.min(pageNo * pageSize, total);
+  const label = rowsLabel ? ` ${rowsLabel}` : "";
 
-  const { page, pageSize } = paginationModel;
-  const from = page * pageSize + 1;
-  const to = Math.min((page + 1) * pageSize, totalRows);
-
-  const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
-    apiRef.current.setPage(value - 1);
-    handleChange("pageNo", value); // 👈 call parent handler
+  const handlePageSizeChange = (value: number) => {
+    handleChange("pageSize", value);
+    handleChange("pageNo", 1);
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        width: "100%",
-        px: 2,
-      }}
-    >
-      <Typography variant="body2" sx={{ color: "var(--color-slate-600)" }}>
-        Showing {from} to {to} of {totalRows}
+    <Box sx={footerRowSx}>
+      <Typography sx={{ fontSize: "0.8125rem", color: TABLE_TEXT_MUTED }}>
+        Showing {from}&ndash;{to} of {total}
+        {label}
       </Typography>
 
-      <Pagination
-        color="primary"
-        count={pageCount}
-        page={paginationModel.page + 1}
-        onChange={handlePageChange}
-      />
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <Select
+          value={pageSize}
+          size="small"
+          onChange={(event) => handlePageSizeChange(Number(event.target.value))}
+          sx={pageSizeSelectSx}
+        >
+          {pageSizeOptions.map((option) => (
+            <MenuItem
+              key={option}
+              value={option}
+              sx={{ fontSize: "0.8125rem" }}
+            >
+              {option} per page
+            </MenuItem>
+          ))}
+        </Select>
+
+        <IconButton
+          aria-label="Previous page"
+          disabled={pageNo <= 1}
+          onClick={() => handleChange("pageNo", pageNo - 1)}
+          sx={pagerButtonSx}
+        >
+          <ChevronLeftIcon fontSize="small" />
+        </IconButton>
+
+        <IconButton
+          aria-label="Next page"
+          disabled={pageNo >= pageCount}
+          onClick={() => handleChange("pageNo", pageNo + 1)}
+          sx={pagerButtonSx}
+        >
+          <ChevronRightIcon fontSize="small" />
+        </IconButton>
+      </Box>
     </Box>
   );
-}
+};
+
+export default TablePagination;

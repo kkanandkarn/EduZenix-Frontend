@@ -1,6 +1,6 @@
-import { Box, Typography } from "@mui/material";
-import React, { useState } from "react";
-import { AppButton, BreadCrumbs } from "../../components";
+import { Box } from "@mui/material";
+import { useState } from "react";
+import { AppButton, TopBar } from "../../components";
 import { useNavigate, useParams } from "react-router-dom";
 import SaveIcon from "@mui/icons-material/Save";
 import EditIcon from "@mui/icons-material/Edit";
@@ -8,7 +8,7 @@ import type { RolesFormState } from "./types";
 import { RolesInput, RolesPermissions } from "./containers";
 
 const RolesFormPage = () => {
-  const { mode, id } = useParams<{
+  const { mode } = useParams<{
     mode: "add" | "edit" | "view";
     id: string;
   }>();
@@ -18,7 +18,7 @@ const RolesFormPage = () => {
     status: "ACTIVE",
     mfaRequired: false,
   });
-  const [error, setErrors] = useState<{ roleName: string }>({
+  const [error] = useState<{ roleName: string }>({
     roleName: "",
   });
 
@@ -51,54 +51,33 @@ const RolesFormPage = () => {
     return { title: "Role", desc: "" };
   };
   return (
-    <Box sx={{ paddingY: 2, paddingX: 4 }}>
-      {" "}
-      <BreadCrumbs />
-      <Box
-        sx={{
-          marginY: 2,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Box>
-          <Typography
-            variant="h6"
-            sx={{ fontWeight: "semibold", color: "var(--slate-800)" }}
-          >
-            {getHeaderText().title}
-          </Typography>
-          <Typography className="text-slate-600">
-            {getHeaderText().desc}
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+    <>
+      <TopBar
+        title={getHeaderText().title}
+        description={getHeaderText().desc}
+        actions={
           <AppButton
             label={mode === "view" ? "Edit" : "Save"}
             startIcon={mode === "view" ? <EditIcon /> : <SaveIcon />}
             onClick={() => navigate("/roles")}
           />
+        }
+        back={{ name: "Roles & Permissions", route: "/roles" }}
+      />
+      <Box sx={{ paddingY: 2, paddingX: 4 }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            gap: 2,
+          }}
+        >
+          <RolesInput state={state} onChange={handleChange} errors={error} />
+          <RolesPermissions />
         </Box>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          gap: 2,
-        }}
-      >
-        <RolesInput state={state} onChange={handleChange} errors={error} />
-        <RolesPermissions />
-      </Box>
-    </Box>
+    </>
   );
 };
 

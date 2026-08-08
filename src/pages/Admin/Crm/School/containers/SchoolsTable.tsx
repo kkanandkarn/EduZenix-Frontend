@@ -5,6 +5,7 @@ import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import EmailIcon from "@mui/icons-material/Email";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { AppTable, AppMenu, SerialNumberCell } from "../../../../../components";
+import type { TableToolbarConfig } from "../../../../../components";
 import type { ModalTypes, SchoolDetails, TableState } from "../types";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
@@ -17,9 +18,10 @@ import {
 interface Props {
   tableState: TableState;
   handleChange: (name: keyof TableState, value: string | number) => void;
+  toolbar?: TableToolbarConfig;
 }
 
-const SchoolsTable = ({ tableState, handleChange }: Props) => {
+const SchoolsTable = ({ tableState, handleChange, toolbar }: Props) => {
   const [rowId, setRowId] = useState<string>("");
   const [modal, setModal] = useState<ModalTypes | null>(null);
   const handleOpenModal = (modalName: ModalTypes, id: string) => {
@@ -267,11 +269,7 @@ const SchoolsTable = ({ tableState, handleChange }: Props) => {
       sortable: false,
       width: 60,
       renderCell: (params: GridRenderCellParams) => (
-        <SerialNumberCell
-          rowIndex={rows.findIndex((row) => row.id === params.id)}
-          pageNo={tableState.pageNo}
-          pageSize={tableState.pageSize}
-        />
+        <SerialNumberCell id={params.id} />
       ),
     },
     {
@@ -394,6 +392,8 @@ const SchoolsTable = ({ tableState, handleChange }: Props) => {
   return (
     <>
       <AppTable
+        {...toolbar}
+        rowsLabel="schools"
         rows={rows}
         columns={columns}
         total={rows.length}

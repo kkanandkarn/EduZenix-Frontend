@@ -1,5 +1,5 @@
-import { Box, Stack, Typography } from "@mui/material";
-import { BreadCrumbs } from "../../components";
+import { Box, Stack } from "@mui/material";
+import { TopBar } from "../../components";
 import {
   DashboardMetricsCard,
   NodeDetails,
@@ -9,37 +9,30 @@ import {
 
 const DashboardPage = () => {
   return (
-    <Box sx={{ paddingY: 2, paddingX: 4 }}>
-      {" "}
-      <BreadCrumbs />
-      <Box sx={{ marginY: 2 }}>
-        <Typography
-          variant="h6"
-          sx={{ fontWeight: "semibold", color: "var(--slate-800)" }}
+    <>
+      <TopBar
+        title="Dashboard"
+        description="Real-time performance and enrollment metrics across all institutional
+          nodes."
+      />
+      <Box sx={{ paddingY: 2, paddingX: 4 }}>
+        <DashboardMetricsCard />
+        <Stack
+          direction={"row"}
+          sx={{
+            width: "100%",
+            display: "flex",
+            alignItems: "stretch",
+            justifyContent: "space-between",
+            gap: 2,
+          }}
         >
-          System Overview
-        </Typography>
-        <Typography className="text-slate-600">
-          Real-time performance and enrollment metrics across all institutional
-          nodes.
-        </Typography>
+          <RevenueEnrollmentChart />
+          <RecentOnboardings />
+        </Stack>
+        <NodeDetails />
       </Box>
-      <DashboardMetricsCard />
-      <Stack
-        direction={"row"}
-        sx={{
-          width: "100%",
-          display: "flex",
-          alignItems: "stretch",
-          justifyContent: "space-between",
-          gap: 2,
-        }}
-      >
-        <RevenueEnrollmentChart />
-        <RecentOnboardings />
-      </Stack>
-      <NodeDetails />
-    </Box>
+    </>
   );
 };
 

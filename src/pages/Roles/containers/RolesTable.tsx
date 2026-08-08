@@ -2,6 +2,7 @@ import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Typography, IconButton, Chip, Box } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { AppTable, AppMenu, SerialNumberCell } from "../../../components";
+import type { TableToolbarConfig } from "../../../components";
 import type { TableState } from "../types";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { formatDateTime } from "../../../utils/helper";
@@ -11,9 +12,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 interface Props {
   tableState: TableState;
   handleChange: (name: keyof TableState, value: string | number) => void;
+  toolbar?: TableToolbarConfig;
 }
 
-const RolesTable = ({ tableState, handleChange }: Props) => {
+const RolesTable = ({ tableState, handleChange, toolbar }: Props) => {
   const rows = [
     {
       id: "cmc8k2x9a0001l704f7v1h2a3",
@@ -111,11 +113,7 @@ const RolesTable = ({ tableState, handleChange }: Props) => {
       sortable: false,
       width: 60,
       renderCell: (params: GridRenderCellParams) => (
-        <SerialNumberCell
-          rowIndex={rows.findIndex((row) => row.id === params.id)}
-          pageNo={tableState.pageNo}
-          pageSize={tableState.pageSize}
-        />
+        <SerialNumberCell id={params.id} />
       ),
     },
     {
@@ -241,6 +239,8 @@ const RolesTable = ({ tableState, handleChange }: Props) => {
 
   return (
     <AppTable
+      {...toolbar}
+      rowsLabel="roles"
       rows={rows}
       columns={columns}
       total={rows.length}

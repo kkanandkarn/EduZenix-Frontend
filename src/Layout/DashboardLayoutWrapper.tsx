@@ -1,24 +1,28 @@
 // DashboardLayoutBasic.tsx
 import * as React from "react";
 import { createTheme } from "@mui/material/styles";
-import DashboardIcon from "@mui/icons-material/Dashboard";
+import DashboardIcon from "@mui/icons-material/GridViewOutlined";
+import { Box, Tooltip } from "@mui/material";
 import {
   AppProvider,
   type Navigation,
+  type NavigationPageItem,
   type Session,
 } from "@toolpad/core/AppProvider";
-import { DashboardLayout } from "@toolpad/core/DashboardLayout";
+import {
+  DashboardLayout,
+  DashboardSidebarPageItem,
+} from "@toolpad/core/DashboardLayout";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import HandshakeIcon from "@mui/icons-material/Handshake";
-import LeaderboardIcon from "@mui/icons-material/Leaderboard";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import SchoolIcon from "@mui/icons-material/School";
-import MenuBookIcon from "@mui/icons-material/MenuBook";
-import BusinessIcon from "@mui/icons-material/Business";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
-import GroupIcon from "@mui/icons-material/Group";
-import ToolbarActions from "./ToolbarActions";
-import AppTitle from "./AppTitle";
+import HandshakeIcon from "@mui/icons-material/HandshakeOutlined";
+import LeaderboardIcon from "@mui/icons-material/LeaderboardOutlined";
+import BusinessIcon from "@mui/icons-material/BusinessOutlined";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
+import GroupIcon from "@mui/icons-material/GroupOutlined";
+import SidebarBrand from "./SidebarBrand";
+import SidebarFooter from "./SidebarFooter";
+import { SIDEBAR_WIDTH } from "./constants";
+import { dashboardLayoutSx } from "./sidebarStyles";
 
 const NAVIGATION: Navigation = [
   { kind: "header", title: "Overview" },
@@ -31,19 +35,12 @@ const NAVIGATION: Navigation = [
     segment: "institution",
     title: "Institutions",
     icon: <BusinessIcon />,
+    // Nested pages are marked with an elbow connector instead of an icon
     children: [
-      {
-        segment: "university",
-        title: "University",
-        icon: <AccountBalanceIcon />,
-      },
-      { segment: "college", title: "College", icon: <SchoolIcon /> },
-      {
-        segment: "other-institutions",
-        title: "Other Institutions",
-        icon: <BusinessIcon />,
-      },
-      { segment: "school", title: "School", icon: <MenuBookIcon /> },
+      { segment: "university", title: "University" },
+      { segment: "college", title: "College" },
+      { segment: "other-institutions", title: "Other Institutions" },
+      { segment: "school", title: "School" },
     ],
   },
   { kind: "divider" },
@@ -55,6 +52,47 @@ const NAVIGATION: Navigation = [
   },
   { segment: "users", title: "User Directory", icon: <GroupIcon /> },
 ];
+
+/**
+ * The collapsed sidebar shows icons only, so the page title moves into a tooltip.
+ * Items with children are left alone: hovering those already opens a flyout
+ * listing the nested pages.
+ */
+const renderPageItem = (
+  item: NavigationPageItem,
+  { mini }: { mini: boolean },
+) => {
+  if (!mini || !item.icon || !item.segment || item.children) {
+    return <DashboardSidebarPageItem item={item} />;
+  }
+
+  return (
+    <DashboardSidebarPageItem
+      // Wrapping the icon means cloning the item, which breaks Toolpad's
+      // identity based path lookup, so pass the href explicitly. Only top level
+      // items reach this function, so the path is just the segment.
+      href={`/${item.segment}`}
+      item={{
+        ...item,
+        icon: (
+          <Tooltip title={item.title ?? item.segment} placement="right" arrow>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: 48,
+                height: 48,
+              }}
+            >
+              {item.icon}
+            </Box>
+          </Tooltip>
+        ),
+      }}
+    />
+  );
+};
 
 // ✅ Scrollbar styles injected globally
 const scrollbarStyles = `
@@ -199,11 +237,13 @@ export default function DashboardLayoutBasic() {
     >
       <DashboardLayout
         slots={{
-          toolbarActions: () => <ToolbarActions />,
-          appTitle: () => <AppTitle />,
+          // The top app bar is replaced by a brand block pinned to the sidebar
+          header: SidebarBrand,
+          sidebarFooter: SidebarFooter,
         }}
-        sidebarExpandedWidth={250}
-        sx={{ bgcolor: "#f8f9fa" }}
+        sidebarExpandedWidth={SIDEBAR_WIDTH}
+        renderPageItem={renderPageItem}
+        sx={dashboardLayoutSx}
       >
         <Outlet />
       </DashboardLayout>

@@ -67,11 +67,7 @@ const OnboardingLinkTable = () => {
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
-        <SerialNumberCell
-          rowIndex={rows.findIndex((row) => row.id === params.id)}
-          pageNo={state.pageNo}
-          pageSize={state.pageSize}
-        />
+        <SerialNumberCell id={params.id} />
       ),
     },
     {

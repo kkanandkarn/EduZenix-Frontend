@@ -1,9 +1,8 @@
-import { Box, Typography } from "@mui/material";
-import { AppButton, BreadCrumbs } from "../../../components";
+import { Box } from "@mui/material";
+import { AppButton, TopBar } from "../../../components";
 import { useState } from "react";
 import type { AddTenantInput, AddTenantInputError } from "./types";
 import { AddTenantDetails, AddTenantModules } from "./containers";
-import DescriptionIcon from "@mui/icons-material/Description";
 import SaveIcon from "@mui/icons-material/Save";
 import { useNavigate } from "react-router-dom";
 
@@ -34,64 +33,37 @@ const AddTenantPage = () => {
   };
 
   return (
-    <Box sx={{ paddingY: 2, paddingX: 4 }}>
-      <BreadCrumbs />
-      <Box
-        sx={{
-          marginY: 2,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Box>
-          <Typography
-            variant="h6"
-            sx={{ fontWeight: "semibold", color: "var(--slate-800)" }}
-          >
-            Add New Tenant
-          </Typography>
-          <Typography className="text-slate-600">
-            Set up a new tenant with their details and subscription plan
-          </Typography>
-        </Box>
+    <>
+      <TopBar
+        title="Add New Tenant"
+        description="Set up a new tenant with their details and subscription plan"
+        actions={
+          <AppButton
+            label="Save"
+            startIcon={<SaveIcon />}
+            onClick={() => navigate("/tenants")}
+          />
+        }
+        back={{ name: "Tenant partners", route: "/tenants" }}
+      />
+      <Box sx={{ paddingY: 2, paddingX: 4 }}>
         <Box
           sx={{
             display: "flex",
-            alignItems: "center",
+            alignItems: "start",
             justifyContent: "center",
             gap: 2,
           }}
         >
-          <AppButton
-            label="Save as Draft"
-            variant="outlined"
-            startIcon={<DescriptionIcon />}
-            // onClick={() => navigate("/tenants/add")}
+          <AddTenantDetails
+            state={state}
+            handleChange={handleChange}
+            errors={errors}
           />
-          <AppButton
-            label="Create Tenant"
-            startIcon={<SaveIcon />}
-            onClick={() => navigate("/tenants")}
-          />
+          <AddTenantModules />
         </Box>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "start",
-          justifyContent: "center",
-          gap: 2,
-        }}
-      >
-        <AddTenantDetails
-          state={state}
-          handleChange={handleChange}
-          errors={errors}
-        />
-        <AddTenantModules />
-      </Box>
-    </Box>
+    </>
   );
 };
 

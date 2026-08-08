@@ -5,15 +5,17 @@ import {
   AppButton,
   SerialNumberCell,
 } from "../../../../../components";
+import type { TableToolbarConfig } from "../../../../../components";
 import { useNavigate } from "react-router-dom";
 import type { TableState } from "../types";
 
 interface Props {
   tableState: TableState;
   handleChange: (name: keyof TableState, value: string | number) => void;
+  toolbar?: TableToolbarConfig;
 }
 
-const LeadsTable = ({ tableState, handleChange }: Props) => {
+const LeadsTable = ({ tableState, handleChange, toolbar }: Props) => {
   const navigate = useNavigate();
   const getBgColor = (percentage: number) => {
     if (percentage <= 25) return "var(--red-500)";
@@ -94,11 +96,7 @@ const LeadsTable = ({ tableState, handleChange }: Props) => {
       sortable: false,
       width: 60,
       renderCell: (params: GridRenderCellParams) => (
-        <SerialNumberCell
-          rowIndex={rows.findIndex((row) => row.id === params.id)}
-          pageNo={tableState.pageNo}
-          pageSize={tableState.pageSize}
-        />
+        <SerialNumberCell id={params.id} />
       ),
     },
     {
@@ -106,6 +104,8 @@ const LeadsTable = ({ tableState, handleChange }: Props) => {
       headerName: "Consultant",
       flex: 1.5,
       disableColumnMenu: true,
+      // The cell is composite, so sorting needs an explicit value.
+      valueGetter: (_, row) => row.consultantName,
       ...columnAlign,
       renderCell: (params: GridRenderCellParams<(typeof rows)[number]>) => (
         <Box
@@ -290,6 +290,8 @@ const LeadsTable = ({ tableState, handleChange }: Props) => {
   ];
   return (
     <AppTable
+      {...toolbar}
+      rowsLabel="consultants"
       rows={rows}
       columns={columns}
       total={rows.length}
