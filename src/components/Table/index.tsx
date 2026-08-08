@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Box, Paper } from "@mui/material";
+import { Box, Paper, Skeleton } from "@mui/material";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { DataGrid } from "@mui/x-data-grid";
@@ -15,7 +15,13 @@ import TableToolbar from "./TableToolbar";
 import type { HideableColumn } from "./ColumnsMenu";
 import { describeAppliedFilters } from "./filterUtils";
 import { DEFAULT_PAGE_SIZE_OPTIONS, TABLE_HEADER_HEIGHT } from "./constants";
-import { dataGridSx, sortedHeaderSx, tableCardSx } from "./tableStyles";
+import {
+  dataGridSx,
+  skeletonCellSx,
+  skeletonGridSx,
+  sortedHeaderSx,
+  tableCardSx,
+} from "./tableStyles";
 import type { AppTableProps } from "./types";
 
 /**
@@ -128,6 +134,32 @@ export default function AppTable<T extends GridValidRowModel>({
     [columns, tableState.sortColumn, tableState.sortOrder],
   );
 
+  // While loading, the grid renders a full page of placeholder rows in the real
+  // column layout instead of the default progress bar above the header.
+  const showSkeleton = Boolean(loading);
+
+  const skeletonRows = useMemo(
+    () =>
+      Array.from({ length: tableState.pageSize }, (_, index) => ({
+        id: `skeleton-${index}`,
+      })) as unknown as T[],
+    [tableState.pageSize],
+  );
+
+  // Cells are placeholders, so the real value/format hooks must not run on them.
+  const skeletonColumns = useMemo(
+    () =>
+      gridColumns.map((column, index) => ({
+        ...column,
+        valueGetter: undefined,
+        valueFormatter: undefined,
+        renderCell: () => (
+          <Skeleton variant="rounded" sx={skeletonCellSx(index)} />
+        ),
+      })),
+    [gridColumns],
+  );
+
   return (
     <Paper elevation={0} sx={tableCardSx}>
       {tabs && tabs.length > 0 && (
@@ -177,13 +209,17 @@ export default function AppTable<T extends GridValidRowModel>({
 
       <DataGrid
         autoHeight
-        rows={rows}
-        columns={gridColumns}
-        loading={loading}
+        rows={showSkeleton ? skeletonRows : rows}
+        columns={showSkeleton ? skeletonColumns : gridColumns}
+        loading={false}
         paginationMode={paginationMode}
-        {...(paginationMode === "server" ? { rowCount: total } : {})}
+        {...(paginationMode === "server"
+          ? { rowCount: showSkeleton ? tableState.pageSize : total }
+          : {})}
         paginationModel={{
-          page: tableState.pageNo - 1,
+          // Client pagination slices the rows itself, so the placeholder page
+          // has to sit at index 0 to stay visible.
+          page: showSkeleton ? 0 : tableState.pageNo - 1,
           pageSize: tableState.pageSize,
         }}
         onPaginationModelChange={(model) => {
@@ -214,7 +250,7 @@ export default function AppTable<T extends GridValidRowModel>({
         disableColumnMenu
         disableRowSelectionOnClick
         hideFooter
-        sx={dataGridSx}
+        sx={[dataGridSx, ...(showSkeleton ? [skeletonGridSx] : [])]}
       />
 
       <TablePagination
