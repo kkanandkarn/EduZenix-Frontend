@@ -61,11 +61,6 @@ export interface OutlineSelectProps {
 }
 export type InputProps = TextInputProps | OTPInputProps | OutlineSelectProps;
 
-export interface TabsProps {
-  value: string;
-  onChange: (event: React.SyntheticEvent, newValue: string) => void;
-  tabs: { value: string; label: string; count?: number }[];
-}
 export type TextTransform =
   | "capitalize"
   | "uppercase"

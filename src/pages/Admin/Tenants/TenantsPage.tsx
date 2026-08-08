@@ -1,11 +1,7 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useState } from "react";
-import {
-  AppButton,
-  BreadCrumbs,
-  FilterRenderer,
-  TableTopBar,
-} from "../../../components";
+import { AppButton, TopBar } from "../../../components";
+import type { SortColumn } from "../../../components";
 import { TenantsMetricsCard, TenantsTable } from "./containers";
 import type {
   SearchColumn,
@@ -15,7 +11,6 @@ import type {
 } from "./types";
 import HandshakeIcon from "@mui/icons-material/Handshake";
 import { useNavigate } from "react-router-dom";
-import DescriptionIcon from "@mui/icons-material/Description";
 
 const TenantsPage = () => {
   const navigate = useNavigate();
@@ -33,6 +28,7 @@ const TenantsPage = () => {
     pageSize: 10,
   });
   const [filters, setFilters] = useState<TenantsFilters>(initialFilters);
+
   const searchColumns: SearchColumn[] = [
     { key: "name", label: "Name", default: true },
     { key: "poc", label: "POC" },
@@ -92,73 +88,61 @@ const TenantsPage = () => {
       label: "Expired At",
     },
   ];
+  const sortColumns: SortColumn[] = [
+    { key: "name", label: "Name" },
+    { key: "poc", label: "POC" },
+    { key: "packageStatus", label: "Status" },
+    { key: "expireDate", label: "Expired At" },
+  ];
   const handleChange = (name: keyof TableState, value: string | number) => {
     setState((p: TableState) => ({ ...p, [name]: value }));
   };
-  const handleApplyFilter = () => {
-    console.log("APPLIED FILTERS: ", filters);
+  const handleApplyFilter = (applied: object) => {
+    setFilters(applied as typeof initialFilters);
+    console.log("APPLIED FILTERS: ", applied);
   };
   const handleResetFilters = () => {
     setFilters(initialFilters);
   };
+  const handleRemoveFilter = (key: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      [key]: initialFilters[key as keyof typeof initialFilters],
+    }));
+  };
   return (
-    <Box sx={{ paddingY: 2, paddingX: 4 }}>
-      <BreadCrumbs />
-      <Box
-        sx={{
-          marginY: 2,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Box>
-          <Typography
-            variant="h6"
-            sx={{ fontWeight: "semibold", color: "var(--slate-800)" }}
-          >
-            Tenant partners
-          </Typography>
-          <Typography className="text-slate-600">
-            Manage and monitor tenant's subscriptions across the ecosystem
-          </Typography>
-        </Box>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <AppButton
-            label="Drafts"
-            variant="outlined"
-            startIcon={<DescriptionIcon />}
-            // onClick={() => navigate("/tenants/add")}
-          />
+    <>
+      <TopBar
+        title="Tenant partners"
+        description=" Manage and monitor tenant's subscriptions across the ecosystem"
+        actions={
           <AppButton
             label="Add New Tenant"
             startIcon={<HandshakeIcon />}
             onClick={() => navigate("/tenants/add")}
           />
+        }
+      />
+      <Box sx={{ paddingY: 2, paddingX: 4 }}>
+        <TenantsMetricsCard />
+        <Box sx={{ mt: 3 }}>
+          <TenantsTable
+            tableState={state}
+            handleChange={handleChange}
+            toolbar={{
+              searchColumns,
+              searchPlaceholder: "Search by name, POC, email etc",
+              sortColumns,
+              appliedFilters: filters,
+              columnFilters,
+              onRemoveFilter: handleRemoveFilter,
+              handleApplyFilter,
+              handleResetFilters,
+            }}
+          />
         </Box>
       </Box>
-      <TenantsMetricsCard />
-      <TableTopBar
-        search={state.search}
-        setSearch={(value) => handleChange("search", value)}
-        setSearchColumn={(value) => handleChange("search", value)}
-        searchColumn={state.searchColumn}
-        searchColumns={searchColumns}
-        filterComponent={
-          <FilterRenderer
-            columnFilters={columnFilters}
-            appliedFilters={filters}
-            setAppliedFilters={setFilters}
-          />
-        }
-        handleApplyFilter={handleApplyFilter}
-        handleResetFilters={handleResetFilters}
-      />
-      <Box sx={{ mt: 2 }}>
-        {" "}
-        <TenantsTable tableState={state} handleChange={handleChange} />
-      </Box>
-    </Box>
+    </>
   );
 };
 

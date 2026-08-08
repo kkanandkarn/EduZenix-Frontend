@@ -1,72 +1,230 @@
-// AppTable.tsx
-import Box from "@mui/material/Box";
+import { useMemo, useState } from "react";
+import { Box, Paper } from "@mui/material";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { DataGrid } from "@mui/x-data-grid";
 import type {
-  GridColDef,
+  GridColumnVisibilityModel,
   GridSortModel,
   GridValidRowModel,
 } from "@mui/x-data-grid";
+import ActiveChips from "./ActiveChips";
 import TablePagination from "./TablePagination";
-import type { TableState } from "../../types";
+import TableTabs from "./TableTabs";
+import TableToolbar from "./TableToolbar";
+import type { HideableColumn } from "./ColumnsMenu";
+import { describeAppliedFilters } from "./filterUtils";
+import { DEFAULT_PAGE_SIZE_OPTIONS, TABLE_HEADER_HEIGHT } from "./constants";
+import { dataGridSx, sortedHeaderSx, tableCardSx } from "./tableStyles";
+import type { AppTableProps } from "./types";
 
-// Generic component banao
-type AppTableProps<T extends GridValidRowModel> = {
-  rows: T[];
-  columns: GridColDef<T>[];
-  total: number;
-  tableState: TableState;
-  handleChange: (name: keyof TableState, value: string | number) => void;
-};
-
+/**
+ * Tabs, search/filter/sort toolbar, grid and pagination in a single card.
+ * Sorting is driven by the toolbar's Sort button, so the headers only mark which
+ * column is currently sorted.
+ */
 export default function AppTable<T extends GridValidRowModel>({
   rows,
   columns,
   total,
   tableState,
   handleChange,
-}: AppTableProps<T>) {
-  const handleSortModelChange = (model: GridSortModel) => {
-    console.log("MODEL: ", model);
-    // if (!onSortChange) return;
-    if (model.length === 0) {
-      // onSortChange("", null); // sort cleared
-    } else {
-      // onSortChange(model[0].field, model[0].sort ?? null);
-    }
+  loading,
+  rowsLabel,
+  pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS,
+  paginationMode = "client",
+  tabs,
+  activeTab,
+  onTabChange,
+  showSearch,
+  searchPlaceholder,
+  searchColumns,
+  sortColumns,
+  columnFilters,
+  appliedFilters,
+  onRemoveFilter,
+  handleApplyFilter,
+  handleResetFilters,
+  showColumns,
+  onExport,
+  actions,
+}: Readonly<AppTableProps<T>>) {
+  const [columnVisibilityModel, setColumnVisibilityModel] =
+    useState<GridColumnVisibilityModel>({});
+
+  const searchEnabled = showSearch ?? Boolean(searchColumns?.length);
+  const sortableColumns = sortColumns ?? [];
+
+  const hideableColumns: HideableColumn[] = useMemo(
+    () =>
+      columns
+        .filter((column) => column.hideable !== false && column.headerName)
+        .map((column) => ({
+          field: column.field,
+          label: column.headerName as string,
+        })),
+    [columns],
+  );
+
+  const hasToolbarContent =
+    searchEnabled ||
+    sortableColumns.length > 0 ||
+    Boolean(columnFilters?.length) ||
+    Boolean(onExport) ||
+    Boolean(actions);
+  const columnsEnabled =
+    (showColumns ?? hasToolbarContent) && hideableColumns.length > 0;
+  const toolbarVisible = hasToolbarContent || columnsEnabled;
+
+  // What the user has narrowed, summarised as removable chips under the toolbar.
+  const appliedFilterChips = useMemo(
+    () => describeAppliedFilters(columnFilters, appliedFilters),
+    [columnFilters, appliedFilters],
+  );
+  const sortedColumnLabel = sortableColumns.find(
+    (column) => column.key === tableState.sortColumn,
+  )?.label;
+  const sortChipLabel = sortedColumnLabel
+    ? `${sortedColumnLabel} (${tableState.sortOrder === "desc" ? "Descending" : "Ascending"})`
+    : "";
+  const chipsVisible = appliedFilterChips.length > 0 || Boolean(sortChipLabel);
+
+  const handleClearAll = () => {
+    handleResetFilters?.();
+    handleChange("sortColumn", "");
   };
+
+  // The Sort button owns the grid's sort model.
+  const sortModel: GridSortModel = useMemo(
+    () =>
+      tableState.sortColumn
+        ? [{ field: tableState.sortColumn, sort: tableState.sortOrder }]
+        : [],
+    [tableState.sortColumn, tableState.sortOrder],
+  );
+
+  // Mark the sorted column in its header instead of showing a sort icon on each.
+  const gridColumns = useMemo(
+    () =>
+      columns.map((column) => {
+        if (column.field !== tableState.sortColumn || column.renderHeader) {
+          return column;
+        }
+
+        return {
+          ...column,
+          renderHeader: () => (
+            <Box sx={sortedHeaderSx}>
+              {column.headerName ?? column.field}
+              {tableState.sortOrder === "desc" ? (
+                <ArrowDownwardIcon />
+              ) : (
+                <ArrowUpwardIcon />
+              )}
+            </Box>
+          ),
+        };
+      }),
+    [columns, tableState.sortColumn, tableState.sortOrder],
+  );
+
   return (
-    <Box sx={{ width: "100%" }}>
+    <Paper elevation={0} sx={tableCardSx}>
+      {tabs && tabs.length > 0 && (
+        <TableTabs
+          tabs={tabs}
+          value={activeTab ?? tabs[0].value}
+          onChange={(value) => onTabChange?.(value)}
+        />
+      )}
+
+      {toolbarVisible && (
+        <TableToolbar
+          showSearch={searchEnabled}
+          search={tableState.search}
+          searchColumn={tableState.searchColumn}
+          searchColumns={searchColumns}
+          searchPlaceholder={searchPlaceholder}
+          onSearchChange={(value) => handleChange("search", value)}
+          onSearchColumnChange={(value) => handleChange("searchColumn", value)}
+          sortColumns={sortableColumns}
+          sortColumn={tableState.sortColumn}
+          sortOrder={tableState.sortOrder}
+          onSortColumnChange={(key) => handleChange("sortColumn", key)}
+          onSortOrderChange={(order) => handleChange("sortOrder", order)}
+          columnFilters={columnFilters}
+          appliedFilters={appliedFilters}
+          handleApplyFilter={handleApplyFilter}
+          handleResetFilters={handleResetFilters}
+          showColumns={columnsEnabled}
+          hideableColumns={hideableColumns}
+          columnVisibilityModel={columnVisibilityModel}
+          onColumnVisibilityChange={setColumnVisibilityModel}
+          onExport={onExport}
+          actions={actions}
+        />
+      )}
+
+      {chipsVisible && (
+        <ActiveChips
+          filters={appliedFilterChips}
+          sortLabel={sortChipLabel}
+          onRemoveFilter={onRemoveFilter}
+          onClearSort={() => handleChange("sortColumn", "")}
+          onClearAll={handleClearAll}
+        />
+      )}
+
       <DataGrid
         autoHeight
         rows={rows}
-        columns={columns}
-        pageSizeOptions={[10]}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: tableState.pageSize,
-              page: tableState.pageNo - 1,
-            },
-          },
+        columns={gridColumns}
+        loading={loading}
+        paginationMode={paginationMode}
+        {...(paginationMode === "server" ? { rowCount: total } : {})}
+        paginationModel={{
+          page: tableState.pageNo - 1,
+          pageSize: tableState.pageSize,
         }}
-        slots={{
-          pagination: TablePagination,
+        onPaginationModelChange={(model) => {
+          if (model.page + 1 !== tableState.pageNo) {
+            handleChange("pageNo", model.page + 1);
+          }
+          if (model.pageSize !== tableState.pageSize) {
+            handleChange("pageSize", model.pageSize);
+          }
         }}
-        slotProps={{
-          pagination: { handleChange }, // 👈 forward prop into slot
+        pageSizeOptions={pageSizeOptions}
+        sortingMode={paginationMode}
+        sortModel={sortModel}
+        onSortModelChange={(model) => {
+          const [item] = model;
+          if ((item?.field ?? "") !== tableState.sortColumn) {
+            handleChange("sortColumn", item?.field ?? "");
+          }
+          if (item?.sort && item.sort !== tableState.sortOrder) {
+            handleChange("sortOrder", item.sort);
+          }
         }}
-        sx={{
-          borderRadius: "18px",
-          "& .MuiDataGrid-cell": {
-            alignItems: "center", // ← forces vertical center on all cells
-            display: "flex",
-          },
-        }}
-        disableRowSelectionOnClick
-        onSortModelChange={handleSortModelChange}
-        rowCount={total}
+        columnVisibilityModel={columnVisibilityModel}
+        onColumnVisibilityModelChange={setColumnVisibilityModel}
+        columnHeaderHeight={TABLE_HEADER_HEIGHT}
         getRowHeight={() => "auto"}
+        disableColumnSorting
+        disableColumnMenu
+        disableRowSelectionOnClick
+        hideFooter
+        sx={dataGridSx}
       />
-    </Box>
+
+      <TablePagination
+        pageNo={tableState.pageNo}
+        pageSize={tableState.pageSize}
+        total={total}
+        pageSizeOptions={pageSizeOptions}
+        rowsLabel={rowsLabel}
+        handleChange={handleChange}
+      />
+    </Paper>
   );
 }

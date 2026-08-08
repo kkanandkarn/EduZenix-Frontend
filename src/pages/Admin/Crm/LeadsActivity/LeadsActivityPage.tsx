@@ -1,10 +1,7 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useState } from "react";
-import {
-  BreadCrumbs,
-  TableTopBar,
-  FilterRenderer,
-} from "../../../../components";
+import { TopBar } from "../../../../components";
+import type { SortColumn } from "../../../../components";
 import {
   LeadsProfile,
   LeadActivityMetricsCard,
@@ -12,8 +9,6 @@ import {
 } from "./containers";
 
 import type { LeadActivityFilters, TableFilters, TableState } from "./types";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import { Link } from "react-router-dom";
 
 const LeadsActvityPage = () => {
   const initialFilters: LeadActivityFilters = {
@@ -106,55 +101,60 @@ const LeadsActvityPage = () => {
     },
   ];
 
+  const sortColumns: SortColumn[] = [
+    { key: "tenantName", label: "Institution Name" },
+    { key: "tenantType", label: "Institution Type" },
+    { key: "ratings", label: "Ratings" },
+    { key: "status", label: "Status" },
+    { key: "date", label: "Date" },
+  ];
+
   const handleChange = (name: keyof TableState, value: string | number) => {
     setState((p: TableState) => ({ ...p, [name]: value }));
   };
 
-  const handleApplyFilter = () => {
-    console.log("APPLIED FILTERS: ", filters);
+  const handleApplyFilter = (applied: object) => {
+    setFilters(applied as typeof initialFilters);
+    console.log("APPLIED FILTERS: ", applied);
   };
   const handleResetFilters = () => {
     setFilters(initialFilters);
   };
+  const handleRemoveFilter = (key: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      [key]: initialFilters[key as keyof typeof initialFilters],
+    }));
+  };
 
   return (
-    <Box sx={{ paddingY: 2, paddingX: 4 }}>
-      {" "}
-      <BreadCrumbs />
-      <Box sx={{ marginY: 2 }}>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Link to="/leads">
-            <ArrowBackIosIcon sx={{ fontSize: "16px" }} />
-          </Link>
-          <Typography
-            variant="h6"
-            sx={{ fontWeight: "semibold", color: "var(--slate-800)" }}
-          >
-            Lead Activity
-          </Typography>
-        </Box>
-        <Typography className="text-slate-600">
-          Track and analyze Consultant performance, follow-ups, and conversion
-          behavior.
-        </Typography>
-      </Box>
-      <LeadsProfile />
-      <LeadActivityMetricsCard />
-      <TableTopBar
-        search={state.search}
-        setSearch={(value) => handleChange("search", value)}
-        filterComponent={
-          <FilterRenderer
-            columnFilters={columnFilters}
-            appliedFilters={filters}
-            setAppliedFilters={setFilters}
-          />
-        }
-        handleApplyFilter={handleApplyFilter}
-        handleResetFilters={handleResetFilters}
+    <>
+      <TopBar
+        title="Lead Activity"
+        description="Track and analyze Consultant performance, follow-ups, and conversion behavior."
+        back={{ name: "Lead Distribution", route: "/leads" }}
       />
-      <LeadsActivityTable tableState={state} handleChange={handleChange} />
-    </Box>
+      <Box sx={{ paddingY: 2, paddingX: 4 }}>
+        <LeadsProfile />
+        <LeadActivityMetricsCard />
+        <Box sx={{ mt: 3 }}>
+          <LeadsActivityTable
+            tableState={state}
+            handleChange={handleChange}
+            toolbar={{
+              showSearch: true,
+              searchPlaceholder: "Search by institution name etc",
+              sortColumns,
+              appliedFilters: filters,
+              columnFilters,
+              onRemoveFilter: handleRemoveFilter,
+              handleApplyFilter,
+              handleResetFilters,
+            }}
+          />
+        </Box>
+      </Box>
+    </>
   );
 };
 

@@ -1,11 +1,7 @@
-import { Box, Paper, Typography } from "@mui/material";
-import React, { useState } from "react";
-import {
-  BreadCrumbs,
-  TableTopBar,
-  FilterRenderer,
-  TabButtons,
-} from "../../../../components";
+import { Box } from "@mui/material";
+import { useState } from "react";
+import { TopBar } from "../../../../components";
+import type { SortColumn, TableTab } from "../../../../components";
 import type {
   TableFilters,
   TableState,
@@ -115,95 +111,84 @@ const CrmUniversityPage = () => {
     },
   ];
 
-  const tabs = [
+  const tabs: TableTab[] = [
     {
       value: "pending",
       label: "Pending",
       count: 1250,
+      color: "warning",
     },
     {
       value: "requestedToAdmin",
       label: "Requested to Admin",
       count: 10,
+      color: "info",
     },
     {
       value: "approved",
       label: "Approved",
       count: 20,
+      color: "success",
     },
     {
       value: "rejected",
       label: "Rejected",
       count: 30,
+      color: "error",
     },
   ];
-  const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
-    setStatus(newValue);
-  };
+  const sortColumns: SortColumn[] = [
+    { key: "name", label: "Name" },
+    { key: "state", label: "State" },
+    { key: "district", label: "City" },
+  ];
 
   const handleChange = (name: keyof TableState, value: string | number) => {
     setState((p: TableState) => ({ ...p, [name]: value }));
   };
-  const handleApplyFilter = () => {
-    console.log("APPLIED FILTERS: ", filters);
+  const handleApplyFilter = (applied: object) => {
+    setFilters(applied as typeof initialFilters);
+    console.log("APPLIED FILTERS: ", applied);
   };
   const handleResetFilters = () => {
     setFilters(initialFilters);
   };
+  const handleRemoveFilter = (key: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      [key]: initialFilters[key as keyof typeof initialFilters],
+    }));
+  };
 
   return (
-    <Box sx={{ paddingY: 2, paddingX: 4 }}>
-      <BreadCrumbs />
-      <Box sx={{ marginY: 2 }}>
-        <Box
-          sx={{
-            display: "flex ",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Box>
-            <Typography
-              variant="h6"
-              sx={{ fontWeight: "semibold", color: "var(--slate-800)" }}
-            >
-              University Management
-            </Typography>
-            <Typography className="text-slate-600">
-              Manage and track university accreditation status
-            </Typography>
-          </Box>
+    <>
+      <TopBar
+        title="University Management"
+        description="Manage and track university accreditation status"
+      />
+      <Box sx={{ paddingY: 2, paddingX: 4 }}>
+        <UniversityStats />
+        <Box sx={{ mt: 3 }}>
+          <UniversityTable
+            tableState={state}
+            handleChange={handleChange}
+            toolbar={{
+              tabs,
+              activeTab: status,
+              onTabChange: setStatus,
+              searchColumns,
+              searchPlaceholder: "Search by name, email, phone etc",
+              sortColumns,
+              appliedFilters: filters,
+              columnFilters,
+              onRemoveFilter: handleRemoveFilter,
+              handleApplyFilter,
+              handleResetFilters,
+            }}
+          />
         </Box>
       </Box>
-      <UniversityStats />
-      <TableTopBar
-        search={state.search}
-        setSearch={(value) => handleChange("search", value)}
-        setSearchColumn={(value) => handleChange("search", value)}
-        searchColumn={state.searchColumn}
-        searchColumns={searchColumns}
-        filterComponent={
-          <FilterRenderer
-            columnFilters={columnFilters}
-            appliedFilters={filters}
-            setAppliedFilters={setFilters}
-          />
-        }
-        handleApplyFilter={handleApplyFilter}
-        handleResetFilters={handleResetFilters}
-      />
-      <Paper
-        elevation={0}
-        sx={{ paddingY: 1, paddingX: 2, marginTop: 2, borderRadius: 3 }}
-      >
-        {" "}
-        <TabButtons value={status} tabs={tabs} onChange={handleTabChange} />
-      </Paper>
-      <Box sx={{ mt: 2 }}>
-        {" "}
-        <UniversityTable tableState={state} handleChange={handleChange} />
-      </Box>
-    </Box>
+    </>
   );
 };
 

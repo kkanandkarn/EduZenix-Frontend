@@ -1,10 +1,7 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useState } from "react";
-import {
-  BreadCrumbs,
-  FilterRenderer,
-  TableTopBar,
-} from "../../../../components";
+import { TopBar } from "../../../../components";
+import type { SortColumn } from "../../../../components";
 import type { LeadsFilters, TableFilters, TableState } from "./types";
 import { LeadsTable, LeadDistributionMetricsCard } from "./containers";
 import type { SearchColumn } from "../../../../components/ui/type";
@@ -30,6 +27,12 @@ const LeadsPage = () => {
     { key: "consultantName", label: "Name", default: true },
     { key: "consultantEmail", label: "Email" },
     { key: "consultantPhone", label: "Phone" },
+  ];
+  const sortColumns: SortColumn[] = [
+    { key: "consultant", label: "Consultant" },
+    { key: "assignedLeads", label: "Assigned" },
+    { key: "completedLeads", label: "Completed" },
+    { key: "pendingLeads", label: "Pending" },
   ];
   const columnFilters: TableFilters[] = [
     {
@@ -72,48 +75,46 @@ const LeadsPage = () => {
     setState((p: TableState) => ({ ...p, [name]: value }));
   };
 
-  const handleApplyFilter = () => {
-    console.log("APPLIED FILTERS: ", filters);
+  const handleApplyFilter = (applied: object) => {
+    setFilters(applied as typeof initialFilters);
+    console.log("APPLIED FILTERS: ", applied);
   };
   const handleResetFilters = () => {
     setFilters(initialFilters);
   };
+  const handleRemoveFilter = (key: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      [key]: initialFilters[key as keyof typeof initialFilters],
+    }));
+  };
 
   return (
-    <Box sx={{ paddingY: 2, paddingX: 4 }}>
-      {" "}
-      <BreadCrumbs />
-      <Box sx={{ marginY: 2 }}>
-        <Typography
-          variant="h6"
-          sx={{ fontWeight: "semibold", color: "var(--slate-800)" }}
-        >
-          Lead Distribution
-        </Typography>
-        <Typography className="text-slate-600">
-          Manage and monitor Consultant performance and lead conversion
-          pipeline.
-        </Typography>
-      </Box>
-      <LeadDistributionMetricsCard />
-      <TableTopBar
-        search={state.search}
-        setSearch={(value) => handleChange("search", value)}
-        setSearchColumn={(value) => handleChange("search", value)}
-        searchColumn={state.searchColumn}
-        searchColumns={searchColumns}
-        filterComponent={
-          <FilterRenderer
-            columnFilters={columnFilters}
-            appliedFilters={filters}
-            setAppliedFilters={setFilters}
-          />
-        }
-        handleApplyFilter={handleApplyFilter}
-        handleResetFilters={handleResetFilters}
+    <>
+      <TopBar
+        title="Lead Distribution"
+        description="Manage and monitor Consultant performance and lead conversion pipeline."
       />
-      <LeadsTable tableState={state} handleChange={handleChange} />
-    </Box>
+      <Box sx={{ paddingY: 2, paddingX: 4 }}>
+        <LeadDistributionMetricsCard />
+        <Box sx={{ mt: 3 }}>
+          <LeadsTable
+            tableState={state}
+            handleChange={handleChange}
+            toolbar={{
+              searchColumns,
+              searchPlaceholder: "Search by name, email, phone etc",
+              sortColumns,
+              appliedFilters: filters,
+              columnFilters,
+              onRemoveFilter: handleRemoveFilter,
+              handleApplyFilter,
+              handleResetFilters,
+            }}
+          />
+        </Box>
+      </Box>
+    </>
   );
 };
 

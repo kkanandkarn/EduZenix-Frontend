@@ -6,11 +6,13 @@ import {
   RatingStars,
   SerialNumberCell,
 } from "../../../../../components";
+import type { TableToolbarConfig } from "../../../../../components";
 import { formatDate, formatTime } from "../../../../../utils/helper";
 
 interface Props {
   tableState: TableState;
   handleChange: (name: keyof TableState, value: string | number) => void;
+  toolbar?: TableToolbarConfig;
 }
 const statusConfig: Record<
   string,
@@ -32,7 +34,7 @@ const statusConfig: Record<
     textColor: "var(--blue-700)",
   },
 };
-const LeadsActivityTable = ({ tableState, handleChange }: Props) => {
+const LeadsActivityTable = ({ tableState, handleChange, toolbar }: Props) => {
   const rows = [
     {
       id: 1,
@@ -135,11 +137,7 @@ const LeadsActivityTable = ({ tableState, handleChange }: Props) => {
       sortable: false,
       width: 60,
       renderCell: (params: GridRenderCellParams) => (
-        <SerialNumberCell
-          rowIndex={rows.findIndex((row) => row.id === params.id)}
-          pageNo={tableState.pageNo}
-          pageSize={tableState.pageSize}
-        />
+        <SerialNumberCell id={params.id} />
       ),
     },
     {
@@ -259,6 +257,8 @@ const LeadsActivityTable = ({ tableState, handleChange }: Props) => {
   ];
   return (
     <AppTable
+      {...toolbar}
+      rowsLabel="activities"
       rows={rows}
       columns={columns}
       total={rows.length}

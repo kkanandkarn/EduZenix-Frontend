@@ -17,21 +17,22 @@ const SearchColumnsSelect = (props: Props) => {
       disableUnderline
       disabled={props.disabled}
       sx={{
-        minWidth: 100,
-        fontSize: "0.8rem",
+        minWidth: 62,
+        height: 26,
+        fontSize: "0.75rem",
         fontFamily: "Poppins, sans-serif",
-        color: "text.secondary",
+        color: "var(--slate-600)",
+        border: "1px solid var(--gray-200)",
+        borderRadius: "6px",
         "& .MuiSelect-select": {
           py: 0,
-          pr: "24px !important",
+          pr: "22px !important",
           pl: 1,
         },
         "& .MuiSvgIcon-root": {
           fontSize: "1rem",
-          color: "text.secondary",
+          color: "var(--slate-500)",
         },
-        borderLeft: "1px solid",
-        borderColor: "divider",
       }}
       MenuProps={{
         slotProps: {

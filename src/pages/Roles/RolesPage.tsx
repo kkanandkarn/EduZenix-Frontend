@@ -1,5 +1,6 @@
-import { Box, Typography } from "@mui/material";
-import { AppButton, BreadCrumbs, TableTopBar } from "../../components";
+import { Box } from "@mui/material";
+import { AppButton, TopBar } from "../../components";
+import type { SortColumn } from "../../components";
 import { useState } from "react";
 import type { TableState } from "../../types";
 import { RolesTable } from "./containers";
@@ -18,49 +19,38 @@ const RolesPage = () => {
   const handleChange = (name: keyof TableState, value: string | number) => {
     setState((p: TableState) => ({ ...p, [name]: value }));
   };
+  const sortColumns: SortColumn[] = [
+    { key: "roleName", label: "Name" },
+    { key: "totalUsers", label: "Assigned Users" },
+    { key: "status", label: "Status" },
+    { key: "createdAt", label: "Created On" },
+  ];
   const navigate = useNavigate();
   return (
-    <Box sx={{ paddingY: 2, paddingX: 4 }}>
-      {" "}
-      <BreadCrumbs />
-      <Box
-        sx={{
-          marginY: 2,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Box>
-          <Typography
-            variant="h6"
-            sx={{ fontWeight: "semibold", color: "var(--slate-800)" }}
-          >
-            Roles & Permissions
-          </Typography>
-          <Typography className="text-slate-600">
-            Create, manage, and assign roles with customizable permissions.
-          </Typography>
-        </Box>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+    <>
+      <TopBar
+        title="Roles & Permissions"
+        description="Create, manage, and assign roles with customizable permissions."
+        actions={
           <AppButton
             label="Add Role"
             startIcon={<AddIcon />}
             onClick={() => navigate("/roles/add")}
           />
-        </Box>
-      </Box>
-      <TableTopBar
-        search={state.search}
-        setSearch={(value) => handleChange("search", value)}
-        setSearchColumn={(value) => handleChange("search", value)}
-        searchColumn={state.searchColumn}
+        }
       />
-      <Box sx={{ mt: 2 }}>
-        {" "}
-        <RolesTable tableState={state} handleChange={handleChange} />
+      <Box sx={{ paddingY: 2, paddingX: 4 }}>
+        <RolesTable
+          tableState={state}
+          handleChange={handleChange}
+          toolbar={{
+            showSearch: true,
+            searchPlaceholder: "Search by role name etc",
+            sortColumns,
+          }}
+        />
       </Box>
-    </Box>
+    </>
   );
 };
 
