@@ -11,7 +11,7 @@ interface Props {
   mode: "add" | "view" | "edit";
   data?: InviteUserState;
 }
-const InviteUserDialog = ({ open, onClose, mode, data }: Props) => {
+const InviteUserDialog = ({ open, onClose, data }: Props) => {
   const [state, setState] = useState<InviteUserState>(
     data ?? {
       id: "",

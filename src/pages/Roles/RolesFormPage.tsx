@@ -8,7 +8,7 @@ import type { RolesFormState } from "./types";
 import { RolesInput, RolesPermissions } from "./containers";
 
 const RolesFormPage = () => {
-  const { mode, id } = useParams<{
+  const { mode } = useParams<{
     mode: "add" | "edit" | "view";
     id: string;
   }>();
@@ -18,7 +18,7 @@ const RolesFormPage = () => {
     status: "ACTIVE",
     mfaRequired: false,
   });
-  const [error, setErrors] = useState<{ roleName: string }>({
+  const [error] = useState<{ roleName: string }>({
     roleName: "",
   });
 
