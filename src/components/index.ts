@@ -13,3 +13,4 @@ export { notifier } from "./Notifier/notifier";
 export { default as SerialNumberCell } from "./Table/SerialNumberCell";
 export { default as TabSelector } from "./TabSelector";
 export { default as TopBar } from "./TopBar";
+export { default as RestrictedAccess } from "./RestrictedAccess";

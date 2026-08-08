@@ -194,7 +194,7 @@ export const pagerButtonSx: SxProps<Theme> = {
  * Grid chrome: grey uppercase header, borderless card edges, hoverable rows.
  * Sorting is driven by the toolbar's Sort button, so no header sort icons.
  */
-export const dataGridSx: SxProps<Theme> = {
+export const dataGridSx = {
   border: "none",
   "--DataGrid-containerBackground": TABLE_HEADER_BG,
   "--DataGrid-rowBorderColor": TABLE_ROW_BORDER,
@@ -235,7 +235,25 @@ export const dataGridSx: SxProps<Theme> = {
 
   "& .MuiDataGrid-columnHeader:focus, & .MuiDataGrid-columnHeader:focus-within, & .MuiDataGrid-cell:focus, & .MuiDataGrid-cell:focus-within":
     { outline: "none" },
-};
+} satisfies SxProps<Theme>;
+
+// Widths cycle per column so the placeholder rows read as text, not a block.
+const SKELETON_CELL_WIDTHS = ["72%", "54%", "84%", "62%"];
+
+/** Placeholder bar filling one cell of a loading row. */
+export const skeletonCellSx = (columnIndex: number): SxProps<Theme> => ({
+  width: SKELETON_CELL_WIDTHS[columnIndex % SKELETON_CELL_WIDTHS.length],
+  maxWidth: 200,
+  height: 12,
+  borderRadius: "4px",
+  backgroundColor: TABLE_BORDER,
+});
+
+/** Placeholder rows are not interactive, so they don't light up on hover. */
+export const skeletonGridSx = {
+  "& .MuiDataGrid-row:hover": { backgroundColor: "transparent" },
+  "& .MuiDataGrid-cell": { cursor: "default" },
+} satisfies SxProps<Theme>;
 
 /** Header of the column the toolbar is currently sorting by. */
 export const sortedHeaderSx: SxProps<Theme> = {
