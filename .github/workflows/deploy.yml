@@ -25,8 +25,8 @@ jobs:
 
       - name: Deploy build to web root
         run: |
-          rm -rf /var/www/eduzenix/*
-          cp -r build/* /var/www/eduzenix/
+          rm -rf /var/www/eduzenix/eduzenix-frontend/*
+          cp -r build/* /var/www/eduzenix/eduzenix-frontend/
 
       - name: Reload Nginx
         run: sudo systemctl reload nginx
