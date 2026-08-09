@@ -1,0 +1,32 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          clean: false
+
+      - name: Copy env file
+        run: cp ~/secrets/eduzenix-frontend.env .env
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build React app
+        run: npm run build
+
+      - name: Deploy build to web root
+        run: |
+          rm -rf /var/www/eduzenix/*
+          cp -r build/* /var/www/eduzenix/
+
+      - name: Reload Nginx
+        run: sudo systemctl reload nginx
