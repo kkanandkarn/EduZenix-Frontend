@@ -7,6 +7,26 @@ import type { LoginFormData, LoginType } from "../type";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { MAX_OTP_COUNT, OTP_TIMER } from "../../../../utils/constant";
 import LoginTypeButtons from "./LoginTypeButtons";
+import AppAlert from "../../../../components/ui/AppAlert";
+import { validateLogin } from "../validations";
+import { useLoginMutation } from "../../../../store/services/authApi";
+import { toaster } from "../../../../utils/toster";
+import { getApiErrorMessage } from "../../../../utils/helper";
+
+const ERROR_MESSAGES: Record<string, string> = {
+  user_not_found:
+    "We couldn't find an account associated with this Google email address. Please contact your administrator.",
+  email_not_verified: "Your Google email is not verified.",
+  login_failed: "Login failed. Please try again.",
+};
+
+function readAndDeleteCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+  if (!match) return null;
+  // delete: same name and path, expired date
+  document.cookie = `${name}=; Max-Age=0; path=/`;
+  return decodeURIComponent(match[1]);
+}
 
 const LoginRightContainer = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -14,6 +34,12 @@ const LoginRightContainer = () => {
   const [loginType, setLoginType] = useState<LoginType>(
     (searchParams.get("loginType") as LoginType) ?? "password",
   );
+  const [banner, setBanner] = useState<string | null>(null);
+
+  useEffect(() => {
+    const code = readAndDeleteCookie("auth_error");
+    if (code) setBanner(ERROR_MESSAGES[code] ?? "Something went wrong.");
+  }, []);
 
   const [state, setState] = useState<LoginFormData>({
     email: "",
@@ -26,6 +52,7 @@ const LoginRightContainer = () => {
   });
 
   const handleLoginTypeChange = (type: LoginType) => {
+    setBanner(null);
     setLoginType(type);
 
     const params = new URLSearchParams(searchParams);
@@ -40,7 +67,10 @@ const LoginRightContainer = () => {
   const timerRef = useRef<number | undefined>(undefined);
   const otpEndTimeRef = useRef<number>(0);
 
+  const [login, { isLoading: isLoggingIn }] = useLoginMutation();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBanner(null);
     const { name, value } = e.target;
     setState((p) => ({ ...p, [name]: value }));
     setErrors((p) => ({ ...p, [name]: "" }));
@@ -100,17 +130,30 @@ const LoginRightContainer = () => {
     navigate("/dashboard");
   };
   const handleSubmit = async () => {
-    // let error = false;
-    // if (!state.email) {
-    //   setErrors((p) => ({ ...p, email: "Email is required" }));
-    //   error = true;
-    // }
-    // if (!state.password) {
-    //   setErrors((p) => ({ ...p, password: "Password is required" }));
-    //   error = true;
-    // }
-    // if (error) return;
-    navigate("/dashboard");
+    const validationErrors = validateLogin(state);
+    if (Object.keys(validationErrors).length) {
+      setErrors({
+        email: validationErrors.email ?? "",
+        password: validationErrors.password ?? "",
+      });
+      return;
+    }
+    try {
+      const response = await login(state).unwrap();
+      if (response.status === "success") {
+        toaster.success("Logged in successfully");
+        navigate("/dashboard");
+      } else {
+        toaster.error(
+          response.message ?? "Something went wrong. Please try again later.",
+        );
+      }
+    } catch (err) {
+      console.log("error: ", err);
+      toaster.error(
+        getApiErrorMessage(err, "something went wrong. please try again later"),
+      );
+    }
   };
 
   return (
@@ -204,7 +247,7 @@ const LoginRightContainer = () => {
 
               <AppButton
                 startIcon={<LoginIcon />}
-                label="Login"
+                label={isLoggingIn ? "Logging in…" : "Login"}
                 onClick={handleSubmit}
               />
             </>
@@ -218,6 +261,12 @@ const LoginRightContainer = () => {
           </Typography>
           <Divider sx={{ flex: 1 }} />
         </Box>
+
+        {banner && (
+          <Box sx={{ mb: 2 }}>
+            <AppAlert severity="error" variant="outlined" message={banner} />
+          </Box>
+        )}
 
         <Button
           variant="outlined"

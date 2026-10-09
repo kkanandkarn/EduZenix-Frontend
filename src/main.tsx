@@ -6,15 +6,21 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "./theme.ts";
 import { forceLightColorScheme } from "./utils/forceLightColorScheme.ts";
+import { Provider } from "react-redux";
+import { makeStore } from "./store";
 
 // Run before the first render so no dark attribute is ever painted.
 forceLightColorScheme();
+
+const store = makeStore();
 
 createRoot(document.getElementById("root")!).render(
   <ThemeProvider theme={theme}>
     <BrowserRouter>
       <CssBaseline />
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </BrowserRouter>
   </ThemeProvider>,
 );

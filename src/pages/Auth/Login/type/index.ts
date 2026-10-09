@@ -1,3 +1,5 @@
+import type { ApiStatus, AuthState } from "../../../../types";
+
 export interface LoginFormData {
   email: string;
   password: string;
@@ -17,4 +19,14 @@ export interface TabsProps {
 export interface TabsPropsTabs {
   value: string;
   label: string;
+}
+
+export interface LoginApiResponse {
+  status: ApiStatus;
+  data: AuthState;
+  message: string;
+}
+export interface ProfileApiRespose {
+  status: ApiStatus;
+  data: AuthState;
 }
