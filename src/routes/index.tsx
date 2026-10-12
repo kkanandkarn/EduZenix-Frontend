@@ -26,12 +26,14 @@ const AddTenantPage = lazy(
 const RolesPage = lazy(() => import("../pages/Roles/RolesPage"));
 const RolesFormPage = lazy(() => import("../pages/Roles/RolesFormPage"));
 const UsersPage = lazy(() => import("../pages/Users/UsersPage"));
+const Mfapage = lazy(() => import("../pages/Auth/Mfa/MfaPage"));
 
 const PageRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} />
       <Route element={<DashboardLayoutWrapper />}>
+        <Route path="/mfa" element={<Mfapage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/leads" element={<LeadsPage />} />
         <Route path="/leads/:id" element={<LeadsActivityPage />} />

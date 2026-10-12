@@ -14,3 +14,4 @@ export { default as SerialNumberCell } from "./Table/SerialNumberCell";
 export { default as TabSelector } from "./TabSelector";
 export { default as TopBar } from "./TopBar";
 export { default as RestrictedAccess } from "./RestrictedAccess";
+export { default as PageLoader } from "./PageLoader";

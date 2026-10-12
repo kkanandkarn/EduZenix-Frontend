@@ -3,6 +3,7 @@ import {
   Avatar,
   Box,
   ButtonBase,
+  CircularProgress,
   Divider,
   ListItemIcon,
   ListItemText,
@@ -16,6 +17,10 @@ import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlin
 import LogoutIcon from "@mui/icons-material/Logout";
 import { AuthenticationContext } from "@toolpad/core/AppProvider";
 import { useSession } from "@toolpad/core/useSession";
+import { useDispatch } from "react-redux";
+import { clearSession, useLogoutMutation } from "../store/services/authApi";
+import type { AppDispatch } from "../store";
+import { getApiErrorMessage } from "../utils/helper";
 import {
   SIDEBAR_BG,
   SIDEBAR_BORDER,
@@ -25,6 +30,7 @@ import {
   SIDEBAR_TEXT_MUTED,
   SIDEBAR_WIDTH,
 } from "./constants";
+import { notifier } from "../components";
 
 const DANGER = "#F87171";
 const DANGER_HOVER = "#FCA5A5";
@@ -45,11 +51,26 @@ const SidebarFooter = ({ mini }: SidebarFooterProps) => {
     .map((word) => word.charAt(0).toUpperCase())
     .join("");
 
-  const closeMenu = () => setAnchorEl(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
 
-  const handleSignOut = () => {
-    closeMenu();
-    authentication?.signOut();
+  // Keep the menu open while logging out so the spinner stays visible
+  const closeMenu = () => {
+    if (!isLoggingOut) setAnchorEl(null);
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await logout().unwrap();
+      setAnchorEl(null);
+      // signOut navigates to "/"
+      authentication?.signOut();
+      dispatch(clearSession());
+    } catch (err) {
+      notifier.error(
+        getApiErrorMessage(err, "Logout failed. Please try again later."),
+      );
+    }
   };
 
   return (
@@ -157,7 +178,13 @@ const SidebarFooter = ({ mini }: SidebarFooterProps) => {
         }}
       >
         <Box
-          sx={{ display: "flex", alignItems: "center", gap: 1.25, px: 2, py: 1 }}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1.25,
+            px: 2,
+            py: 1,
+          }}
         >
           <Avatar
             src={user?.image ?? undefined}
@@ -207,9 +234,11 @@ const SidebarFooter = ({ mini }: SidebarFooterProps) => {
 
         <MenuItem
           onClick={handleSignOut}
+          disabled={isLoggingOut}
           sx={{
             "&&": {
               color: DANGER,
+              "&.Mui-disabled": { opacity: 1 },
               "& .MuiSvgIcon-root": { color: DANGER },
               "&:hover": {
                 backgroundColor: "rgba(248, 113, 113, 0.12)",
@@ -220,7 +249,11 @@ const SidebarFooter = ({ mini }: SidebarFooterProps) => {
           }}
         >
           <ListItemIcon>
-            <LogoutIcon />
+            {isLoggingOut ? (
+              <CircularProgress size={20} sx={{ color: DANGER }} />
+            ) : (
+              <LogoutIcon />
+            )}
           </ListItemIcon>
           <ListItemText>Logout</ListItemText>
         </MenuItem>

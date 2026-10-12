@@ -4,11 +4,15 @@ import type { AuthState } from "../../../types";
 interface AuthStateData {
   authData: AuthState | null;
   isInitialized: boolean;
+  // True after an explicit logout, so the dashboard doesn't treat the missing
+  // authData as a hard refresh and refetch the profile (401 -> refresh -> reload).
+  isLoggedOut: boolean;
 }
 
 const initialState: AuthStateData = {
   authData: null,
   isInitialized: false,
+  isLoggedOut: false,
 };
 
 const authSlice = createSlice({
@@ -18,10 +22,12 @@ const authSlice = createSlice({
     setAuthData(state, action: PayloadAction<AuthState>) {
       state.authData = action.payload;
       state.isInitialized = true;
+      state.isLoggedOut = false;
     },
     clearAuthData(state) {
       state.authData = null;
       state.isInitialized = false;
+      state.isLoggedOut = true;
     },
   },
 });

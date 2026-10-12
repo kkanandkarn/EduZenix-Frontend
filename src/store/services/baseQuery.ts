@@ -32,7 +32,7 @@ const LOGIN_REDIRECT_ERROR_TYPES = new Set([
 ]);
 
 const redirectToLogin = () => {
-  globalThis.location.href = "/login";
+  window.location.href = "/";
 };
 
 export const baseQueryWithAuth: BaseQueryFn<

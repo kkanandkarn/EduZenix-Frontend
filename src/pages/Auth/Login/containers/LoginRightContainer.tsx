@@ -3,15 +3,30 @@ import { Box, Typography, Button, Divider, Stack } from "@mui/material";
 import masterLogo from "../../../../assets/images/sofzenix-logo.png";
 import LoginIcon from "@mui/icons-material/Login";
 import { Input, AppButton, notifier } from "../../../../components";
-import type { LoginFormData, LoginType } from "../type";
+import type {
+  LoginFormData,
+  LoginType,
+  SendOtpRequest,
+  VerifyOtpRequest,
+} from "../type";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { MAX_OTP_COUNT, OTP_TIMER } from "../../../../utils/constant";
 import LoginTypeButtons from "./LoginTypeButtons";
 import AppAlert from "../../../../components/ui/AppAlert";
-import { validateLogin } from "../validations";
-import { useLoginMutation } from "../../../../store/services/authApi";
-import { toaster } from "../../../../utils/toster";
+import {
+  validateLogin,
+  validateSendOtp,
+  validateVerifyOtp,
+} from "../validations";
+import {
+  useLazyGoogleLoginQuery,
+  useLoginMutation,
+} from "../../../../store/services/authApi";
 import { getApiErrorMessage } from "../../../../utils/helper";
+import {
+  useSendOtpMutation,
+  useVerifyOtpMutation,
+} from "../../../../store/services/otpApi";
 
 const ERROR_MESSAGES: Record<string, string> = {
   user_not_found:
@@ -68,6 +83,10 @@ const LoginRightContainer = () => {
   const otpEndTimeRef = useRef<number>(0);
 
   const [login, { isLoading: isLoggingIn }] = useLoginMutation();
+  const [sendOtp, { isLoading: isSendingOtp }] = useSendOtpMutation();
+  const [verifyOtp, { isLoading: isVerifyingOtp }] = useVerifyOtpMutation();
+  const [googleLogin, { isLoading: isLoggingGoogle }] =
+    useLazyGoogleLoginQuery();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBanner(null);
@@ -101,11 +120,104 @@ const LoginRightContainer = () => {
   useEffect(() => {
     return () => clearInterval(timerRef.current);
   }, []);
+  const sendOtpApi = async () => {
+    const validationErrors = validateSendOtp({ email: state.email });
+    if (Object.keys(validationErrors).length) {
+      setErrors({
+        email: validationErrors.email ?? "",
+        password: "",
+      });
+      return { success: false };
+    }
+    try {
+      const payload: SendOtpRequest = {
+        otpReason: "LOGIN",
+        otpType: "EMAIL",
+        otpIdentifier: state.email,
+      };
+      const response = await sendOtp(payload).unwrap();
+      if (response.status === "success") {
+        notifier.success(
+          "Otp sent successfully. Didn't receive OTP ? Please check spam",
+        );
+        return { success: true };
+      } else {
+        notifier.error(
+          response.message ?? "Something went wrong. Please try again later.",
+        );
+        return { success: false };
+      }
+    } catch (err) {
+      console.log("error: ", err);
+      notifier.error(
+        getApiErrorMessage(err, "something went wrong. please try again later"),
+      );
+      return { success: false };
+    }
+  };
+  const verifyOtpApi = async () => {
+    const validationErrors = validateVerifyOtp({
+      email: state.email,
+      otp: otp,
+    });
+    if (Object.keys(validationErrors).length) {
+      setErrors({
+        email: validationErrors.email ?? "",
+        password: "",
+      });
+      return { success: false };
+    }
+    try {
+      const payload: VerifyOtpRequest = {
+        otpReason: "LOGIN",
+        otpType: "EMAIL",
+        otpIdentifier: state.email,
+        otp,
+      };
+      const response = await verifyOtp(payload).unwrap();
+      if (response.status === "success") {
+        notifier.success("Otp Verified successfully.");
+        return { success: true };
+      } else {
+        notifier.error(
+          response.message ?? "Something went wrong. Please try again later.",
+        );
+        return { success: false };
+      }
+    } catch (err) {
+      console.log("error: ", err);
+      notifier.error(
+        getApiErrorMessage(err, "something went wrong. please try again later"),
+      );
+      return { success: false };
+    }
+  };
+  const handleGoogleLogin = () => {
+    try {
+      const GOOGLE_REDIRECT_URI = `${import.meta.env.VITE_API_URL}/auth/google/callback`;
+      const params = new URLSearchParams({
+        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+        redirect_uri: GOOGLE_REDIRECT_URI,
+        response_type: "code",
+        scope: "openid profile email",
+      });
+      window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params}`;
+    } catch (err) {
+      console.log("error: ", err);
+      notifier.error(
+        getApiErrorMessage(err, "something went wrong. please try again later"),
+      );
+      return { success: false };
+    }
+  };
   const handleSendOtp = async () => {
     if (sendOtpCount >= MAX_OTP_COUNT) {
       notifier.error("Maximum OTP attempts reached.");
       return;
     }
+
+    const response = await sendOtpApi();
+    if (!response.success) return;
 
     setOtpSent(true);
     setSendOtpCount(0);
@@ -120,13 +232,17 @@ const LoginRightContainer = () => {
       return;
     }
 
+    const response = await sendOtpApi();
+    if (!response.success) return;
+
     setSendOtpCount((c) => c + 1);
     startOtpTimer();
     notifier.success("OTP Resent Successfully.");
   };
 
   const handleVerifyOtp = async () => {
-    notifier.success("OTP Verified Successfully.");
+    const response = await verifyOtpApi();
+    if (!response.success) return;
     navigate("/dashboard");
   };
   const handleSubmit = async () => {
@@ -141,16 +257,16 @@ const LoginRightContainer = () => {
     try {
       const response = await login(state).unwrap();
       if (response.status === "success") {
-        toaster.success("Logged in successfully");
+        notifier.success("Logged in successfully");
         navigate("/dashboard");
       } else {
-        toaster.error(
+        notifier.error(
           response.message ?? "Something went wrong. Please try again later.",
         );
       }
     } catch (err) {
       console.log("error: ", err);
-      toaster.error(
+      notifier.error(
         getApiErrorMessage(err, "something went wrong. please try again later"),
       );
     }
@@ -194,7 +310,11 @@ const LoginRightContainer = () => {
             disabled={otpSent}
           />
           {loginType === "otp" && !otpSent && (
-            <AppButton label="Send OTP" onClick={handleSendOtp} />
+            <AppButton
+              label={isSendingOtp ? "Sending OTP..." : "Send OTP"}
+              disabled={isSendingOtp}
+              onClick={handleSendOtp}
+            />
           )}
           {loginType === "otp" && otpSent && (
             <>
@@ -217,9 +337,11 @@ const LoginRightContainer = () => {
 
               <AppButton
                 startIcon={<LoginIcon />}
-                label="Verify OTP & Login"
+                label={
+                  isVerifyingOtp ? "Verifying OTP..." : "Verify OTP & Login"
+                }
                 onClick={handleVerifyOtp}
-                disabled={otp.length !== 4}
+                disabled={otp.length !== 4 || isVerifyingOtp}
               />
 
               {/* <Button
@@ -278,6 +400,8 @@ const LoginRightContainer = () => {
             gap: 1,
             textTransform: "none",
           }}
+          disabled={isLoggingGoogle}
+          onClick={handleGoogleLogin}
         >
           <svg
             width="18"
@@ -303,7 +427,9 @@ const LoginRightContainer = () => {
             />
             <path fill="none" d="M0 0h48v48H0z" />
           </svg>
-          Continue with Google
+          {isLoggingGoogle
+            ? "Redirecting to Google..."
+            : "Continue with Google"}
         </Button>
 
         <Stack

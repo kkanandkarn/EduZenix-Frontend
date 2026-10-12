@@ -14,6 +14,10 @@ import {
   DashboardSidebarPageItem,
 } from "@toolpad/core/DashboardLayout";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import type { RootState } from "../store";
+import { useProfileDetailsQuery } from "../store/services/authApi";
+import { PageLoader } from "../components";
 import HandshakeIcon from "@mui/icons-material/HandshakeOutlined";
 import LeaderboardIcon from "@mui/icons-material/LeaderboardOutlined";
 import BusinessIcon from "@mui/icons-material/BusinessOutlined";
@@ -150,6 +154,16 @@ export default function DashboardLayoutBasic() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // On a hard refresh the store is empty, so rehydrate it from the profile
+  // endpoint. `onQueryStarted` in authApi dispatches the result into the slice.
+  // After logout authData is null too, but there is nothing to rehydrate —
+  // skip so the profile call doesn't 401 and trigger a full-page redirect.
+  const authData = useSelector((state: RootState) => state.auth.authData);
+  const isLoggedOut = useSelector((state: RootState) => state.auth.isLoggedOut);
+  const { isLoading: isProfileLoading } = useProfileDetailsQuery(undefined, {
+    skip: !!authData || isLoggedOut,
+  });
+
   // ✅ Inject scrollbar styles once on mount
   React.useEffect(() => {
     const styleTag = document.createElement("style");
@@ -195,33 +209,43 @@ export default function DashboardLayoutBasic() {
     };
   }, [location, navigate]);
 
-  const [session, setSession] = React.useState<Session | null>({
-    user: {
-      name: "Anand kumar Karn",
-      email: "anandkumarkarn2002@gmail.com",
-      image:
-        "https://api.dicebear.com/9.x/initials/svg?seed=Anandkarn&backgroundColor=1976d2",
-    },
-  });
+  // Derive the session from the store rather than seeding useState with it:
+  // authData is still null on the first render (it arrives from the profile
+  // query), and a useState initial value would never pick up the update.
+  const [isSignedOut, setIsSignedOut] = React.useState(false);
+
+  const session = React.useMemo<Session | null>(() => {
+    if (!authData || isSignedOut) return null;
+
+    const name = [authData.firstName, authData.lastName]
+      .filter(Boolean)
+      .join(" ");
+
+    return {
+      user: {
+        name,
+        email: authData.email,
+        image:
+          authData.picture ??
+          `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(name || "Eduzenix")}&backgroundColor=1976d2`,
+      },
+    };
+  }, [authData, isSignedOut]);
 
   const authentication = React.useMemo(
     () => ({
-      signIn: () => {
-        setSession({
-          user: {
-            name: "Anand kumar Karn",
-            email: "anandkumarkarn2002@gmail.com",
-            image: "https://api.dicebear.com/9.x/initials/svg?seed=Anandkarn",
-          },
-        });
-      },
+      signIn: () => setIsSignedOut(false),
       signOut: () => {
         navigate("/");
-        setSession(null);
+        setIsSignedOut(true);
       },
     }),
     [navigate],
   );
+
+  if (!authData && isProfileLoading) {
+    return <PageLoader />;
+  }
 
   return (
     <AppProvider

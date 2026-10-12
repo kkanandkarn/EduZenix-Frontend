@@ -10,9 +10,10 @@ import type {
 } from "../../pages/Auth/Login/type";
 import { clearAuthData, setAuthData } from "../features/auth/authSlice";
 import { OK } from "../../utils/status-codes";
+import type { AppDispatch } from "..";
 
 export const authApi = createApi({
-  reducerPath: "autoTaggingApi",
+  reducerPath: "authApi",
   baseQuery: baseQueryWithAuth,
 
   tagTypes: ["ProfileDetails"],
@@ -66,17 +67,6 @@ export const authApi = createApi({
         method: "POST",
         body,
       }),
-      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(clearAuthData());
-        } catch {
-          // Logout failed — the session is still live, so leave authData alone.
-          console.log(
-            "Logout failed, leaving authData in store. User may still be logged in.",
-          );
-        }
-      },
     }),
     refresh: builder.mutation<void, void>({
       query: (body) => ({
@@ -85,20 +75,29 @@ export const authApi = createApi({
         body,
       }),
     }),
-    googleLogin: builder.mutation<void, void>({
-      query: (body) => ({
-        url: "/auth/google/login",
-        method: "POST",
-        body,
-      }),
+    googleLogin: builder.query<void, void>({
+      query: () => {
+        const endPoint = "/auth/google/login";
+        return endPoint;
+      },
     }),
   }),
 });
+
+/*
+Wipes the logged-out user's state: authData plus every cached RTK Query entry
+(so a stale profile isn't served to the next login). clearAuthData also sets
+isLoggedOut, which keeps DashboardLayoutWrapper from refetching the profile.
+*/
+export const clearSession = () => (dispatch: AppDispatch) => {
+  dispatch(clearAuthData());
+  dispatch(authApi.util.resetApiState());
+};
 
 export const {
   useLoginMutation,
   useProfileDetailsQuery,
   useLogoutMutation,
   useRefreshMutation,
-  useGoogleLoginMutation,
+  useLazyGoogleLoginQuery,
 } = authApi;

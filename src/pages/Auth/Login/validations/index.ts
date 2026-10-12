@@ -1,5 +1,9 @@
 import Joi from "joi";
-import type { LoginFormData } from "../type";
+import type {
+  LoginFormData,
+  SendOtpFormData,
+  VerifyOtpFormData,
+} from "../type";
 
 export const passwordValidation = (fieldName = "Password") =>
   Joi.string()
@@ -32,6 +36,40 @@ const loginSchema = Joi.object<LoginFormData>({
   password: passwordValidation("Password"),
 });
 
+const sendOtpSchema = Joi.object<SendOtpFormData>({
+  email: Joi.string()
+    .trim()
+    .email({ tlds: { allow: false } })
+    .required()
+    .messages({
+      "string.base": "Email must be a string.",
+      "string.empty": "Email is required.",
+      "string.email": "Email must be a valid email address.",
+      "any.required": "Email is required.",
+    }),
+});
+const verifyOtpSchema = Joi.object<VerifyOtpFormData>({
+  email: Joi.string()
+    .trim()
+    .email({ tlds: { allow: false } })
+    .required()
+    .messages({
+      "string.base": "Email must be a string.",
+      "string.empty": "Email is required.",
+      "string.email": "Email must be a valid email address.",
+      "any.required": "Email is required.",
+    }),
+  otp: Joi.string()
+    .pattern(/^\d{4}$/)
+    .required()
+    .messages({
+      "any.required": "OTP is required",
+      "string.empty": "OTP cannot be empty",
+      "string.base": "OTP must be a string",
+      "string.pattern.base": "OTP must be exactly 4 digits",
+    }),
+});
+
 export type FormErrors<T> = Partial<Record<keyof T, string>>;
 
 function getErrors<T>(
@@ -51,8 +89,16 @@ function getErrors<T>(
   return errors;
 }
 
-export function validateLogin(
-  input: LoginFormData,
-): FormErrors<LoginFormData> {
+export function validateLogin(input: LoginFormData): FormErrors<LoginFormData> {
   return getErrors(loginSchema, input);
+}
+export function validateSendOtp(
+  input: SendOtpFormData,
+): FormErrors<SendOtpFormData> {
+  return getErrors(sendOtpSchema, input);
+}
+export function validateVerifyOtp(
+  input: VerifyOtpFormData,
+): FormErrors<VerifyOtpFormData> {
+  return getErrors(verifyOtpSchema, input);
 }

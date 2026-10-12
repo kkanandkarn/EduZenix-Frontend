@@ -39,6 +39,7 @@ export type SearchColumn = {
 
 export interface AuthState {
   id: string;
+  picture: string | null;
   firstName: string;
   lastName: string;
   email: string;
