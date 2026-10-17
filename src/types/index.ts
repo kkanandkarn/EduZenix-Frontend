@@ -46,6 +46,7 @@ export interface AuthState {
   roleId: string;
   requireMfa: boolean;
   mfaCompleted: boolean;
+  mfaVerified: boolean;
   tenantId: string;
   userType: UserType;
   status: Status;

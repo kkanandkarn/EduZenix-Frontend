@@ -3,7 +3,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { Link } from "react-router-dom";
-import { LOGO_IMAGE } from "../utils/constant";
+import { APP_NAME, LOGO_IMAGE } from "../utils/constant";
 import {
   BRAND_HEIGHT,
   MOBILE_BRAND_HEIGHT,
@@ -44,7 +44,10 @@ const SidebarBrand = ({
         bgcolor: SIDEBAR_BG,
         borderBottom: `1px solid ${SIDEBAR_BORDER}`,
         borderRight: { xs: "none", md: `1px solid ${SIDEBAR_BORDER}` },
-        width: { xs: "100%", md: menuOpen ? SIDEBAR_WIDTH : SIDEBAR_MINI_WIDTH },
+        width: {
+          xs: "100%",
+          md: menuOpen ? SIDEBAR_WIDTH : SIDEBAR_MINI_WIDTH,
+        },
         height: { xs: MOBILE_BRAND_HEIGHT, md: BRAND_HEIGHT },
         flexDirection: { xs: "row", md: menuOpen ? "row" : "column" },
         justifyContent: { xs: "flex-start", md: "center" },
@@ -72,7 +75,7 @@ const SidebarBrand = ({
         <Box
           component="img"
           src={LOGO_IMAGE}
-          alt="EduZenix"
+          alt={APP_NAME}
           sx={{ height: { xs: 32, md: menuOpen ? 38 : 32 }, width: "auto" }}
         />
 
@@ -92,7 +95,7 @@ const SidebarBrand = ({
               lineHeight: 1.2,
             }}
           >
-            EduZenix
+            {APP_NAME}
           </Typography>
           <Box
             sx={{

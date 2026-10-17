@@ -27,6 +27,10 @@ import SidebarBrand from "./SidebarBrand";
 import SidebarFooter from "./SidebarFooter";
 import { SIDEBAR_WIDTH } from "./constants";
 import { dashboardLayoutSx } from "./sidebarStyles";
+import { APP_NAME } from "../utils/constant";
+
+// Protected routes rendered without the sidebar / dashboard chrome.
+const FULL_SCREEN_ROUTES = new Set(["/mfa"]);
 
 const NAVIGATION: Navigation = [
   { kind: "header", title: "Overview" },
@@ -164,6 +168,26 @@ export default function DashboardLayoutBasic() {
     skip: !!authData || isLoggedOut,
   });
 
+  // Keep users who still owe an MFA step on /mfa, whichever protected route
+  // they land on (direct URL, refresh, back button).
+  const mfaRequired = authData?.role.requireMfa || authData?.requireMfa;
+  const mfaCompleted = authData?.mfaCompleted;
+  const mfaVerified = authData?.mfaVerified;
+  React.useEffect(() => {
+    if (mfaRequired && !mfaCompleted && location.pathname !== "/mfa") {
+      void navigate("/mfa", { replace: true });
+      return;
+    }
+    if (
+      mfaRequired &&
+      mfaCompleted &&
+      !mfaVerified &&
+      location.pathname !== "/mfa"
+    ) {
+      void navigate("/mfa", { replace: true });
+    }
+  }, [mfaRequired, mfaCompleted, location.pathname, navigate]);
+
   // ✅ Inject scrollbar styles once on mount
   React.useEffect(() => {
     const styleTag = document.createElement("style");
@@ -227,7 +251,7 @@ export default function DashboardLayoutBasic() {
         email: authData.email,
         image:
           authData.picture ??
-          `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(name || "Eduzenix")}&backgroundColor=1976d2`,
+          `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(name || APP_NAME)}&backgroundColor=1976d2`,
       },
     };
   }, [authData, isSignedOut]);
@@ -245,6 +269,11 @@ export default function DashboardLayoutBasic() {
 
   if (!authData && isProfileLoading) {
     return <PageLoader />;
+  }
+
+  // Protected but full-screen: same auth/profile handling, no sidebar.
+  if (FULL_SCREEN_ROUTES.has(location.pathname)) {
+    return <Outlet />;
   }
 
   return (

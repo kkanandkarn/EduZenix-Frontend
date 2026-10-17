@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material";
 import React from "react";
-import { LoginLeftContainer } from "./containers";
+import { LoginLeftContainer, MfaContainer } from "./containers";
 
 const MfaPage = () => {
   return (
@@ -14,7 +14,9 @@ const MfaPage = () => {
       <Grid sx={{ width: "50%" }}>
         <LoginLeftContainer />
       </Grid>
-      <Grid sx={{ width: "50%" }}>{/* <LoginRightContainer /> */}</Grid>
+      <Grid sx={{ width: "50%" }}>
+        <MfaContainer />
+      </Grid>
     </Grid>
   );
 };

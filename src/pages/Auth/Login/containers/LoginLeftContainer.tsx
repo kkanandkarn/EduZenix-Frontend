@@ -4,7 +4,7 @@ import SchoolIcon from "@mui/icons-material/School";
 import PeopleIcon from "@mui/icons-material/People";
 import ShieldIcon from "@mui/icons-material/Shield";
 import loginBanner from "../../../../assets/images/login-banner.png";
-import { LOGO_IMAGE } from "../../../../utils/constant";
+import { APP_NAME, LOGO_IMAGE } from "../../../../utils/constant";
 
 const LoginLeftContainer = () => {
   return (
@@ -58,7 +58,7 @@ const LoginLeftContainer = () => {
         {/* Logo */}
         <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
           <Box component="img" src={LOGO_IMAGE} sx={{ width: 56 }} />
-          <Typography variant="h5">EduZenix</Typography>
+          <Typography variant="h5">{APP_NAME}</Typography>
         </Stack>
 
         {/* Center */}
@@ -85,7 +85,7 @@ const LoginLeftContainer = () => {
         {/* Footer */}
         <Stack direction="row" sx={{ justifyContent: "space-between" }}>
           <Typography variant="body2" sx={{ opacity: 0.6 }}>
-            © {new Date().getFullYear()} EduZenix ERP
+            © {new Date().getFullYear()} {APP_NAME} ERP
           </Typography>
           <Typography sx={{ color: "skyblue", cursor: "pointer" }}>
             Need Help?

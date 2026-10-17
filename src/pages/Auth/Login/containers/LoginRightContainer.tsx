@@ -4,6 +4,7 @@ import masterLogo from "../../../../assets/images/sofzenix-logo.png";
 import LoginIcon from "@mui/icons-material/Login";
 import { Input, AppButton, notifier } from "../../../../components";
 import type {
+  LoginApiResponse,
   LoginFormData,
   LoginType,
   SendOtpRequest,
@@ -167,6 +168,7 @@ const LoginRightContainer = () => {
       });
       return { success: false };
     }
+    let redirectUri = "dashboard";
     try {
       const payload: VerifyOtpRequest = {
         otpReason: "LOGIN",
@@ -174,22 +176,26 @@ const LoginRightContainer = () => {
         otpIdentifier: state.email,
         otp,
       };
-      const response = await verifyOtp(payload).unwrap();
+      const response = (await verifyOtp(payload).unwrap()) as LoginApiResponse;
+      console.log("RESPONSE: ", response);
       if (response.status === "success") {
         notifier.success("Otp Verified successfully.");
-        return { success: true };
+        const mfaRequired =
+          response.data.role.requireMfa || response.data.requireMfa;
+        redirectUri = mfaRequired ? "/mfa" : "/dashboard";
+        return { success: true, redirectUri };
       } else {
         notifier.error(
           response.message ?? "Something went wrong. Please try again later.",
         );
-        return { success: false };
+        return { success: false, redirectUri };
       }
     } catch (err) {
       console.log("error: ", err);
       notifier.error(
         getApiErrorMessage(err, "something went wrong. please try again later"),
       );
-      return { success: false };
+      return { success: false, redirectUri };
     }
   };
   const handleGoogleLogin = () => {
@@ -243,7 +249,8 @@ const LoginRightContainer = () => {
   const handleVerifyOtp = async () => {
     const response = await verifyOtpApi();
     if (!response.success) return;
-    navigate("/dashboard");
+
+    navigate(response.redirectUri ?? "/dashboard");
   };
   const handleSubmit = async () => {
     const validationErrors = validateLogin(state);
@@ -258,7 +265,11 @@ const LoginRightContainer = () => {
       const response = await login(state).unwrap();
       if (response.status === "success") {
         notifier.success("Logged in successfully");
-        navigate("/dashboard");
+        const mfaRequired =
+          response.data.role.requireMfa || response.data.requireMfa;
+
+        const redirectUri = mfaRequired ? "/mfa" : "/dashboard";
+        navigate(redirectUri);
       } else {
         notifier.error(
           response.message ?? "Something went wrong. Please try again later.",

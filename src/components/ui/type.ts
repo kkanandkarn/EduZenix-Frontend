@@ -70,6 +70,7 @@ export type TextTransform =
   | "full-size-kana";
 export interface ButtonProps {
   startIcon?: React.ReactNode;
+  endIcon?: React.ReactNode;
   onClick?: () => void;
   variant?: "contained" | "outlined" | "text";
   disabled?: boolean;

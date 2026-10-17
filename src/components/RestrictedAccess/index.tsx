@@ -7,7 +7,7 @@ import DesktopWindowsIcon from "@mui/icons-material/DesktopWindows";
 import PublicIcon from "@mui/icons-material/Public";
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
 import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
-import { LOGO_IMAGE } from "../../utils/constant";
+import { APP_NAME, LOGO_IMAGE } from "../../utils/constant";
 import type { BlockReason } from "../../hooks/useDeviceGuard";
 
 interface RestrictedAccessProps {
@@ -38,12 +38,9 @@ const COLORS = {
 
 /** What the guard matched on, phrased for the person reading the screen. */
 const REASON_MESSAGE: Record<Exclude<BlockReason, null>, string> = {
-  "mobile-os":
-    "We detected a phone or tablet. Eduzenix ERP requires a desktop for optimal functionality — use our mobile app for on-the-go access.",
-  "touch-input":
-    "We detected a touch-only device. Eduzenix ERP needs a mouse or trackpad — use our mobile app for on-the-go access.",
-  "narrow-viewport":
-    "This window is narrower than the 1024px Eduzenix ERP needs. Maximise it on a desktop, or use our mobile app.",
+  "mobile-os": `We detected a phone or tablet. ${APP_NAME} ERP requires a desktop for optimal functionality — use our mobile app for on-the-go access.`,
+  "touch-input": `We detected a touch-only device. ${APP_NAME} ERP needs a mouse or trackpad — use our mobile app for on-the-go access.`,
+  "narrow-viewport": `This window is narrower than the 1024px ${APP_NAME} ERP needs. Maximise it on a desktop, or use our mobile app.`,
 };
 
 /** Short tag for the diagnostic line. */
@@ -159,7 +156,7 @@ const RestrictedAccess: FC<RestrictedAccessProps> = ({ width, reason }) => {
 
   const message = reason
     ? REASON_MESSAGE[reason]
-    : "Eduzenix ERP requires a desktop for optimal functionality. Use our mobile app for on-the-go access.";
+    : `${APP_NAME} ERP requires a desktop for optimal functionality. Use our mobile app for on-the-go access.`;
   const reasonTag = reason ? REASON_TAG[reason] : "unsupported_device";
 
   return (
@@ -201,7 +198,7 @@ const RestrictedAccess: FC<RestrictedAccessProps> = ({ width, reason }) => {
               <Box
                 component="img"
                 src={LOGO_IMAGE}
-                alt="Eduzenix ERP"
+                alt={`${APP_NAME} ERP`}
                 onError={() => setLogoFailed(true)}
                 sx={{ width: 32, height: 32, objectFit: "contain" }}
               />
@@ -210,7 +207,7 @@ const RestrictedAccess: FC<RestrictedAccessProps> = ({ width, reason }) => {
               variant="h6"
               sx={{ fontWeight: 700, color: COLORS.white }}
             >
-              Eduzenix
+              {APP_NAME}
               <Box component="span" sx={{ color: COLORS.accent }}>
                 ERP
               </Box>
@@ -333,7 +330,7 @@ const RestrictedAccess: FC<RestrictedAccessProps> = ({ width, reason }) => {
               <Typography
                 sx={{ fontSize: "0.875rem", color: COLORS.textPrimary }}
               >
-                Access all Eduzenix features
+                Access all {APP_NAME} features
               </Typography>
             </Box>
 
@@ -378,11 +375,7 @@ const RestrictedAccess: FC<RestrictedAccessProps> = ({ width, reason }) => {
 
             {/* Mobile app */}
             <Stack spacing={2}>
-              <Stack
-                direction="row"
-                spacing={1}
-                sx={{ alignItems: "center" }}
-              >
+              <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                 <Box
                   sx={{
                     width: 24,
@@ -404,7 +397,7 @@ const RestrictedAccess: FC<RestrictedAccessProps> = ({ width, reason }) => {
                     color: COLORS.white,
                   }}
                 >
-                  Eduzenix Mobile App
+                  {APP_NAME} Mobile App
                 </Typography>
               </Stack>
 
@@ -415,7 +408,7 @@ const RestrictedAccess: FC<RestrictedAccessProps> = ({ width, reason }) => {
                     <AndroidIcon sx={{ fontSize: 20, color: COLORS.white }} />
                   }
                   iconBg="linear-gradient(135deg, #22C55E 0%, #16A34A 100%)"
-                  caption="Get Eduzenix on"
+                  caption={`Get ${APP_NAME} on`}
                   title="Google Play"
                   hoverBorder="rgba(34, 197, 94, 0.5)"
                   badgeColor="#4ADE80"
@@ -438,10 +431,8 @@ const RestrictedAccess: FC<RestrictedAccessProps> = ({ width, reason }) => {
 
             {/* Retry once the window is desktop-sized */}
             <Stack spacing={1.5} sx={{ alignItems: "center" }}>
-              <Typography
-                sx={{ fontSize: "0.75rem", color: COLORS.textMuted }}
-              >
-                Switch to desktop for full Eduzenix ERP access
+              <Typography sx={{ fontSize: "0.75rem", color: COLORS.textMuted }}>
+                Switch to desktop for full {APP_NAME} ERP access
               </Typography>
               <Button
                 onClick={() => window.location.reload()}
@@ -555,7 +546,7 @@ const RestrictedAccess: FC<RestrictedAccessProps> = ({ width, reason }) => {
             </Link>
           </Stack>
           <Typography sx={{ fontSize: "0.75rem", color: "#475569" }}>
-            © {new Date().getFullYear()} Eduzenix ERP • Education Management
+            © {new Date().getFullYear()} {APP_NAME} ERP • Education Management
             System
           </Typography>
         </Box>

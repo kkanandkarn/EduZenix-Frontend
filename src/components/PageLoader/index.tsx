@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
-import { LOGO_IMAGE } from "../../utils/constant";
+import { APP_NAME, LOGO_IMAGE } from "../../utils/constant";
 
 interface PageLoaderProps {
   message?: string;
@@ -62,7 +62,7 @@ const PageLoader: FC<PageLoaderProps> = ({
           <Box
             component="img"
             src={LOGO_IMAGE}
-            alt="EduZenix"
+            alt={APP_NAME}
             sx={{ height: 40, width: "auto" }}
           />
           <Typography
@@ -73,11 +73,15 @@ const PageLoader: FC<PageLoaderProps> = ({
               lineHeight: 1,
             }}
           >
-            EduZenix
+            {APP_NAME}
           </Typography>
         </Box>
 
-        <CircularProgress size={36} thickness={3} sx={{ color: COLORS.spinner }} />
+        <CircularProgress
+          size={36}
+          thickness={3}
+          sx={{ color: COLORS.spinner }}
+        />
 
         <Typography sx={{ color: COLORS.muted, fontSize: "1rem" }}>
           {message}

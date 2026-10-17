@@ -29,8 +29,16 @@ const authSlice = createSlice({
       state.isInitialized = false;
       state.isLoggedOut = true;
     },
+    // Drops authData without marking a logout, so the dashboard refetches the
+    // profile (e.g. after MFA setup changes the user's details).
+    resetAuthData(state) {
+      state.authData = null;
+      state.isInitialized = false;
+      state.isLoggedOut = false;
+    },
   },
 });
 
-export const { setAuthData, clearAuthData } = authSlice.actions;
+export const { setAuthData, clearAuthData, resetAuthData } =
+  authSlice.actions;
 export default authSlice.reducer;
